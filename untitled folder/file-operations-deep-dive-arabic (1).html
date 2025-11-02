@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شرح عمليات الملفات - خطوة بخطوة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .header .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            color: #667eea;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+        }
+
+        .subsection-title {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+            padding-right: 15px;
+            border-right: 5px solid #764ba2;
+        }
+
+        .diagram-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 3px solid #667eea;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.7;
+            color: #2d3748;
+            font-weight: 500;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 30px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        .code-header {
+            background: #21252b;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px 12px 0 0;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: -30px;
+            position: relative;
+            z-index: 1;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .step-box {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-left: 15px;
+        }
+
+        .step-title {
+            font-size: 1.4em;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-right: 5px solid #17a2b8;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(23, 162, 184, 0.2);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-right: 5px solid #28a745;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-right: 5px solid #ffc107;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2);
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; font-weight: bold; }
+        .number { color: #d19a66; }
+
+        .flow-arrow {
+            text-align: center;
+            font-size: 2.5em;
+            color: #667eea;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .iteration-box {
+            background: #f8f9fa;
+            border: 2px dashed #764ba2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .iteration-title {
+            background: #764ba2;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .variable-state {
+            background: white;
+            border-right: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            border-radius: 5px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: right;
+            font-size: 1.1em;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            text-align: right;
+        }
+
+        table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .toggle-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .collapsible-content.active {
+            max-height: 10000px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.9em;
+            direction: ltr;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📂 شرح عمليات الملفات بالتفصيل</h1>
+            <div class="subtitle">فهم الحفظ والتحميل: خطوة بخطوة مع التنفيذ الكامل</div>
+        </div>
+
+        <div class="content">
+
+            <!-- Overview -->
+            <section class="section">
+                <h2 class="section-title">🎯 نظرة عامة: الصورة الكاملة</h2>
+                
+                <div class="diagram-box">
+                    <pre>
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                         معمارية تدفق البيانات                            ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+    الذاكرة (RAM)                                القرص الصلب (Hard Drive)
+    سريعة، مؤقتة                                    بطيء، دائم
+         ↓                                              ↓
+    ┌─────────┐                                  ┌──────────┐
+    │ struct  │  ─────الحفظ────────────→         │   ملف    │
+    │ stMember│                                   │ .txt     │
+    │         │  ←────التحميل──────────          │          │
+    └─────────┘                                  └──────────┘
+         ↑                                              ↑
+    برنامجك                                        التخزين الدائم
+    (يضيع عند الإغلاق)                           (يبقى بعد إعادة التشغيل)
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                            عمليتان رئيسيتان                              ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+    1️⃣  الحفظ في الملف                         2️⃣  التحميل من الملف
+    
+    struct → string → file                  file → string → struct
+    
+    كائن Struct                                 ملف نصي
+         ↓                                          ↓
+    ConvertRecordToLine()                     قراءة سطر سطر
+         ↓                                          ↓
+    نص مع فواصل                                  نص مع فواصل
+         ↓                                          ↓
+    SaveToFile()                              SplitString()
+         ↓                                          ↓
+    ملف على القرص                                مصفوفة نصوص
+                                                   ↓
+                                              ConvertLineToRecord()
+                                                   ↓
+                                              كائن Struct
+                    </pre>
+                </div>
+
+                <div class="success-box">
+                    <h3>✨ المفهوم الأساسي</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">
+                        <strong>الملفات تخزن النصوص فقط.</strong> يجب علينا تحويل البيانات المنظمة (struct) 
+                        إلى نص قبل الحفظ، وتحويل النص مرة أخرى إلى بيانات منظمة عند التحميل.
+                    </p>
+                </div>
+            </section>
+
+            <!-- PART 1: SAVE TO FILE -->
+            <section class="section">
+                <h2 class="section-title">💾 الجزء الأول: الحفظ في الملف</h2>
+
+                <h3 class="subsection-title">السيناريو</h3>
+                <div class="info-box">
+                    <p style="font-size: 1.1em;">
+                        عندك عضو موجود في الذاكرة (RAM) وبدك تحفظه بشكل دائم على القرص الصلب حتى يبقى بعد إغلاق البرنامج.
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        نقطة البداية: Struct في الذاكرة
+                    </div>
+                    <div class="code-block">
+<pre><span class="comment">// عندنا كائن عضو في الذاكرة RAM</span>
+<span class="keyword">stMember</span> Member;
+Member.MemberId = <span class="string">"M150"</span>;
+Member.Name = <span class="string">"Walaa"</span>;
+Member.Phone = <span class="string">"123-456"</span>;
+Member.Age = <span class="number">39</span>;
+
+<span class="comment">// هذه البيانات موجودة فقط في الذاكرة</span>
+<span class="comment">// إذا أغلقنا البرنامج، راح تضيع! ❌</span>
+<span class="comment">// لازم نحفظها في ملف</span></pre>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        تحويل Struct → String (نص)
+                    </div>
+                    
+                    <p style="margin-bottom: 20px; font-size: 1.05em;">
+                        الملفات تخزن النصوص فقط. لازم نحول الـ struct لسطر نصي واحد.
+                    </p>
+
+                    <div class="code-header">دالة ConvertRecordToLine()</div>
+                    <div class="code-block">
+<pre><span class="keyword">string</span> <span class="function">ConvertRecordToLine</span>(<span class="keyword">stMember</span> Member, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>) {
+    
+    <span class="keyword">string</span> result = <span class="string">""</span>;  <span class="comment">// نبدأ بنص فاضي</span>
+    
+    <span class="comment">// نبني السطر خطوة خطوة:</span>
+    
+    result += Member.MemberId;           <span class="comment">// result = "M150"</span>
+    result += Separator;                 <span class="comment">// result = "M150#//#"</span>
+    
+    result += Member.Name;               <span class="comment">// result = "M150#//#Walaa"</span>
+    result += Separator;                 <span class="comment">// result = "M150#//#Walaa#//#"</span>
+    
+    result += Member.Phone;              <span class="comment">// result = "M150#//#Walaa#//#123-456"</span>
+    result += Separator;                 <span class="comment">// result = "M150#//#Walaa#//#123-456#//#"</span>
+    
+    result += <span class="function">to_string</span>(Member.Age);   <span class="comment">// result = "M150#//#Walaa#//#123-456#//#39"</span>
+    
+    <span class="keyword">return</span> result;  <span class="comment">// نرجع السطر الكامل</span>
+}</pre>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4>🔍 شو بيصير هون؟</h4>
+                        <p><strong>المدخلات:</strong> struct {M150, Walaa, 123-456, 39}</p>
+                        <p><strong>العملية:</strong> ربط كل الحقول مع الفاصل "#//#"</p>
+                        <p><strong>المخرجات:</strong> "M150#//#Walaa#//#123-456#//#39"</p>
+                        <p style="margin-top: 15px;"><strong>ليش "#//#"؟</strong> هاد الفاصل الفريد من الصعب يظهر في البيانات الحقيقية، فبيمنع التضارب.</p>
+                    </div>
+
+                    <div class="diagram-box">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">رسم توضيحي: تحويل Struct لـ String</h4>
+                        <pre>
+┌──────────────────────────────────────────┐
+│           struct stMember                │
+├──────────────────────────────────────────┤
+│  MemberId:  "M150"                       │
+│  Name:      "Walaa"                      │
+│  Phone:     "123-456"                    │
+│  Age:       39                           │
+└──────────────────────────────────────────┘
+                ↓
+        ConvertRecordToLine()
+                ↓
+┌──────────────────────────────────────────┐
+│     سطر نصي واحد                        │
+├──────────────────────────────────────────┤
+│  "M150#//#Walaa#//#123-456#//#39"       │
+└──────────────────────────────────────────┘
+        </pre>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        كتابة السطر النصي في الملف
+                    </div>
+
+                    <p style="margin-bottom: 20px; font-size: 1.05em;">
+                        الآن عندنا سطر نصي. خلينا نكتبه في الملف على القرص الصلب.
+                    </p>
+
+                    <div class="code-header">دالة SaveMemberDataLinetoFile()</div>
+                    <div class="code-block">
+<pre><span class="keyword">void</span> <span class="function">SaveMemberDataLinetoFile</span>(<span class="keyword">string</span> FileName, <span class="keyword">string</span> strDataLine) {
+    
+    <span class="keyword">fstream</span> MyFile;  <span class="comment">// كائن الملف (أداة للتعامل مع الملفات)</span>
+    
+    <span class="comment">// فتح الملف في وضع الكتابة + الإضافة</span>
+    <span class="comment">// ios::out = وضع الكتابة (output)</span>
+    <span class="comment">// ios::app = وضع الإضافة (append) - يضيف في النهاية بدون مسح البيانات الموجودة</span>
+    <span class="comment">// مع بعض: ينشئ الملف إذا مش موجود، يضيف إذا موجود</span>
+    MyFile.<span class="function">open</span>(FileName, <span class="keyword">ios::out</span> | <span class="keyword">ios::app</span>);
+    
+    <span class="comment">// نتحقق إذا الملف انفتح بنجاح</span>
+    <span class="keyword">if</span>(MyFile.<span class="function">is_open</span>()) {
+        
+        <span class="comment">// نكتب سطر البيانات في الملف</span>
+        <span class="comment">// endl يضيف سطر جديد (\n) وينظف الـ buffer</span>
+        MyFile &lt;&lt; strDataLine &lt;&lt; <span class="keyword">endl</span>;
+        
+        <span class="comment">// نقفل الملف لحفظ التغييرات وتحرير موارد النظام</span>
+        MyFile.<span class="function">close</span>();
+        
+        <span class="comment">// ✅ البيانات الآن محفوظة بشكل دائم على القرص!</span>
+    }
+}</pre>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>📝 أوضاع فتح الملفات</h4>
+                        <table>
+                            <tr>
+                                <th>الوضع</th>
+                                <th>الرمز</th>
+                                <th>السلوك</th>
+                            </tr>
+                            <tr>
+                                <td><strong>إدخال</strong></td>
+                                <td><code>ios::in</code></td>
+                                <td>فتح للقراءة. يجب أن يكون الملف موجود.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>إخراج</strong></td>
+                                <td><code>ios::out</code></td>
+                                <td>فتح للكتابة. ينشئ الملف أو <strong>يمسح المحتوى الموجود</strong>.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>إضافة</strong></td>
+                                <td><code>ios::app</code></td>
+                                <td>يضيف في نهاية الملف. يحافظ على المحتوى الموجود.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>إخراج+إضافة</strong></td>
+                                <td><code>ios::out | ios::app</code></td>
+                                <td><strong>الأفضل لإضافة سجلات:</strong> ينشئ الملف إذا مفقود، يضيف إذا موجود.</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="diagram-box">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">رسم توضيحي: الإضافة للملف</h4>
+                        <pre>
+قبل: Members.txt
+┌────────────────────────────────────────────┐
+│ M148#//#John#//#999-888#//#45              │
+│ M149#//#Sarah#//#777-666#//#28             │
+└────────────────────────────────────────────┘
+
+        SaveMemberDataLinetoFile()
+        تكتب: "M150#//#Walaa#//#123-456#//#39"
+                ↓
+
+بعد: Members.txt
+┌────────────────────────────────────────────┐
+│ M148#//#John#//#999-888#//#45              │
+│ M149#//#Sarah#//#777-666#//#28             │
+│ M150#//#Walaa#//#123-456#//#39    ← جديد! │
+└────────────────────────────────────────────┘
+
+✅ البيانات محفوظة بشكل دائم!
+✅ تبقى بعد إعادة تشغيل البرنامج
+✅ يمكن قراءتها لاحقاً
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>✅ عملية الحفظ اكتملت!</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">
+                        <strong>الملخص:</strong><br>
+                        1. بدأنا بـ struct في الذاكرة<br>
+                        2. حولناه لنص مع فواصل: "M150#//#Walaa#//#123-456#//#39"<br>
+                        3. كتبنا النص في ملف على القرص<br>
+                        4. البيانات الآن محفوظة بشكل دائم! 🎉
+                    </p>
+                </div>
+            </section>
+
+            <!-- PART 2: LOAD FROM FILE -->
+            <section class="section">
+                <h2 class="section-title">📂 الجزء الثاني: التحميل من الملف</h2>
+
+                <h3 class="subsection-title">السيناريو</h3>
+                <div class="info-box">
+                    <p style="font-size: 1.1em;">
+                        البرنامج بدأ. الملف فيه أعضاء محفوظين. لازم نحملهم في الذاكرة (vector) 
+                        حتى نقدر نشتغل معهم في البرنامج.
+                    </p>
+                </div>
+
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">1</span>
+                        نقطة البداية: ملف على القرص
+                    </div>
+                    
+                    <div class="diagram-box">
+                        <pre>
+Members.txt (على القرص الصلب)
+┌──────────────────────────────────────────┐
+│ M150#//#Walaa#//#123-456#//#39           │
+│ M151#//#Ahmed#//#555-777#//#25           │
+│ M152#//#Sara#//#888-999#//#30            │
+└──────────────────────────────────────────┘
+
+الهدف: نحمل هدول في الذاكرة كـ vector&lt;stMember&gt;
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">2</span>
+                        فتح الملف وقراءة سطر سطر
+                    </div>
+
+                    <div class="code-header">دالة LoadMembersDataFromFile()</div>
+                    <div class="code-block">
+<pre><span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; <span class="function">LoadMembersDataFromFile</span>(<span class="keyword">string</span> FileName) {
+    
+    <span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMembers;  <span class="comment">// حاوية فاضية لكل الأعضاء</span>
+    <span class="keyword">fstream</span> MyFile;                <span class="comment">// كائن الملف</span>
+    
+    <span class="comment">// فتح الملف في وضع القراءة (input)</span>
+    MyFile.<span class="function">open</span>(FileName, <span class="keyword">ios::in</span>);
+    
+    <span class="comment">// نتحقق إذا الملف موجود وانفتح بنجاح</span>
+    <span class="keyword">if</span>(MyFile.<span class="function">is_open</span>()) {
+        
+        <span class="keyword">string</span> Line;       <span class="comment">// متغير مؤقت لتخزين كل سطر</span>
+        <span class="keyword">stMember</span> Member;  <span class="comment">// متغير مؤقت للعضو المحول</span>
+        
+        <span class="comment">// نقرأ الملف سطر سطر لحد ما نوصل لنهاية الملف</span>
+        <span class="comment">// getline() ترجع false لما نوصل لنهاية الملف (EOF)</span>
+        <span class="keyword">while</span>(<span class="function">getline</span>(MyFile, Line)) {
+            
+            <span class="comment">// نحول السطر النصي لـ struct</span>
+            Member = <span class="function">ConvertLineToRecord</span>(Line);
+            
+            <span class="comment">// نضيف العضو للـ vector</span>
+            vMembers.<span class="function">push_back</span>(Member);
+        }
+        
+        <span class="comment">// نقفل الملف لتحرير موارد النظام</span>
+        MyFile.<span class="function">close</span>();
+    }
+    <span class="comment">// إذا الملف مش موجود، نرجع vector فاضي</span>
+    
+    <span class="keyword">return</span> vMembers;  <span class="comment">// نرجع كل الأعضاء المحملين</span>
+}</pre>
+                    </div>
+
+                    <button class="toggle-button" onclick="toggleContent('load-detailed')">
+                        🔍 إظهار/إخفاء: تنفيذ مفصل سطر بسطر
+                    </button>
+
+                    <div id="load-detailed" class="collapsible-content">
+                        <div class="diagram-box">
+                            <h4 style="color: #667eea; margin-bottom: 15px;">تدفق التنفيذ المفصل</h4>
+                            <pre>
+═══════════════════════════════════════════════════════════════
+التهيئة
+═══════════════════════════════════════════════════════════════
+vector&lt;stMember&gt; vMembers;  // فاضي: []
+تم فتح الملف: Members.txt
+
+═══════════════════════════════════════════════════════════════
+التكرار 1
+═══════════════════════════════════════════════════════════════
+getline(MyFile, Line);
+→ Line = "M150#//#Walaa#//#123-456#//#39"
+
+Member = ConvertLineToRecord(Line);
+→ Member = {M150, Walaa, 123-456, 39}
+
+vMembers.push_back(Member);
+→ vMembers = [{M150, Walaa, 123-456, 39}]
+
+═══════════════════════════════════════════════════════════════
+التكرار 2
+═══════════════════════════════════════════════════════════════
+getline(MyFile, Line);
+→ Line = "M151#//#Ahmed#//#555-777#//#25"
+
+Member = ConvertLineToRecord(Line);
+→ Member = {M151, Ahmed, 555-777, 25}
+
+vMembers.push_back(Member);
+→ vMembers = [{M150, Walaa, 123-456, 39},
+               {M151, Ahmed, 555-777, 25}]
+
+═══════════════════════════════════════════════════════════════
+التكرار 3
+═══════════════════════════════════════════════════════════════
+getline(MyFile, Line);
+→ Line = "M152#//#Sara#//#888-999#//#30"
+
+Member = ConvertLineToRecord(Line);
+→ Member = {M152, Sara, 888-999, 30}
+
+vMembers.push_back(Member);
+→ vMembers = [{M150, Walaa, 123-456, 39},
+               {M151, Ahmed, 555-777, 25},
+               {M152, Sara, 888-999, 30}]
+
+═══════════════════════════════════════════════════════════════
+نهاية الملف
+═══════════════════════════════════════════════════════════════
+getline(MyFile, Line);
+→ ترجع false (ما في أسطر إضافية)
+→ الـ while loop تتوقف
+
+MyFile.close();
+return vMembers;  // ترجع vector فيه 3 أعضاء
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-arrow">↓</div>
+
+                <div class="step-box">
+                    <div class="step-title">
+                        <span class="step-number">3</span>
+                        تحويل كل سطر نصي → Struct
+                    </div>
+
+                    <p style="margin-bottom: 20px; font-size: 1.05em;">
+                        لكل سطر نقرأه من الملف، لازم نحوله لـ struct. 
+                        هاي العملية فيها عمليتين فرعيتين:
+                    </p>
+
+                    <h4 style="color: #764ba2; margin: 20px 0;">العملية الفرعية أ: تقسيم النص</h4>
+
+                    <div class="code-header">دالة SplitString()</div>
+                    <div class="code-block">
+<pre><span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; <span class="function">SplitString</span>(<span class="keyword">string</span> S1, <span class="keyword">string</span> Delimiter) {
+    
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vString;  <span class="comment">// حاوية للحقول المستخرجة</span>
+    <span class="keyword">short</span> pos = <span class="number">0</span>;                <span class="comment">// موقع الفاصل في النص</span>
+    <span class="keyword">string</span> sWord;                <span class="comment">// تخزين مؤقت للكلمة المستخرجة</span>
+    
+    <span class="comment">// نكرر لحد ما ما نلاقي فواصل</span>
+    <span class="keyword">while</span>((pos = S1.<span class="function">find</span>(Delimiter)) != <span class="keyword">std::string::npos</span>) {
+        
+        <span class="comment">// نستخرج الكلمة من بداية النص لموقع الفاصل</span>
+        sWord = S1.<span class="function">substr</span>(<span class="number">0</span>, pos);
+        
+        <span class="comment">// نضيف الكلمة للـ vector إذا مش فاضية</span>
+        <span class="keyword">if</span>(sWord != <span class="string">""</span>) {
+            vString.<span class="function">push_back</span>(sWord);
+        }
+        
+        <span class="comment">// نحذف الجزء المعالَج (الكلمة + الفاصل) من النص</span>
+        <span class="comment">// هاي العملية بتحركنا للأمام لمعالجة الكلمة التالية</span>
+        S1.<span class="function">erase</span>(<span class="number">0</span>, pos + Delimiter.<span class="function">length</span>());
+    }
+    
+    <span class="comment">// نضيف آخر كلمة متبقية (ما في فاصل بعدها)</span>
+    <span class="keyword">if</span>(S1 != <span class="string">""</span>) {
+        vString.<span class="function">push_back</span>(S1);
+    }
+    
+    <span class="keyword">return</span> vString;  <span class="comment">// نرجع الـ vector مع كل الحقول</span>
+}</pre>
+                    </div>
+
+                    <button class="toggle-button" onclick="toggleContent('split-detailed')">
+                        🔍 إظهار/إخفاء: تنفيذ SplitString خطوة بخطوة
+                    </button>
+
+                    <div id="split-detailed" class="collapsible-content">
+                        <div class="diagram-box">
+                            <h4 style="color: #667eea; margin-bottom: 15px;">تنفيذ SplitString الكامل</h4>
+                            <pre>
+المدخلات:
+  S1 = "M150#//#Walaa#//#123-456#//#39"
+  Delimiter = "#//#"
+
+الهدف: استخراج ["M150", "Walaa", "123-456", "39"]
+
+═══════════════════════════════════════════════════════════════
+التكرار 1 في الـ LOOP
+═══════════════════════════════════════════════════════════════</pre>
+                            <div class="iteration-box">
+                                <div class="iteration-title">التكرار 1</div>
+                                <div class="variable-state">
+                                    <strong>الحالة الحالية:</strong><br>
+                                    S1 = "M150#//#Walaa#//#123-456#//#39"<br>
+                                    vString = []
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 1:</strong> البحث عن الفاصل<br>
+                                    pos = S1.find("#//#")<br>
+                                    pos = 4  ← لقيناه في الموقع 4
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 2:</strong> استخراج النص الفرعي<br>
+                                    sWord = S1.substr(0, 4)<br>
+                                    sWord = "M150"
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 3:</strong> إضافة للـ vector<br>
+                                    vString.push_back("M150")<br>
+                                    vString = ["M150"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 4:</strong> حذف الجزء المعالَج<br>
+                                    S1.erase(0, 4 + 4)  // نحذف "M150#//#"<br>
+                                    S1 = "Walaa#//#123-456#//#39"
+                                </div>
+                            </div>
+
+                            <pre>
+═══════════════════════════════════════════════════════════════
+التكرار 2 في الـ LOOP
+═══════════════════════════════════════════════════════════════</pre>
+                            <div class="iteration-box">
+                                <div class="iteration-title">التكرار 2</div>
+                                <div class="variable-state">
+                                    <strong>الحالة الحالية:</strong><br>
+                                    S1 = "Walaa#//#123-456#//#39"<br>
+                                    vString = ["M150"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 1:</strong> البحث عن الفاصل<br>
+                                    pos = S1.find("#//#")<br>
+                                    pos = 5  ← لقيناه في الموقع 5
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 2:</strong> استخراج النص الفرعي<br>
+                                    sWord = S1.substr(0, 5)<br>
+                                    sWord = "Walaa"
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 3:</strong> إضافة للـ vector<br>
+                                    vString.push_back("Walaa")<br>
+                                    vString = ["M150", "Walaa"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 4:</strong> حذف الجزء المعالَج<br>
+                                    S1.erase(0, 5 + 4)  // نحذف "Walaa#//#"<br>
+                                    S1 = "123-456#//#39"
+                                </div>
+                            </div>
+
+                            <pre>
+═══════════════════════════════════════════════════════════════
+التكرار 3 في الـ LOOP
+═══════════════════════════════════════════════════════════════</pre>
+                            <div class="iteration-box">
+                                <div class="iteration-title">التكرار 3</div>
+                                <div class="variable-state">
+                                    <strong>الحالة الحالية:</strong><br>
+                                    S1 = "123-456#//#39"<br>
+                                    vString = ["M150", "Walaa"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 1:</strong> البحث عن الفاصل<br>
+                                    pos = S1.find("#//#")<br>
+                                    pos = 7  ← لقيناه في الموقع 7
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 2:</strong> استخراج النص الفرعي<br>
+                                    sWord = S1.substr(0, 7)<br>
+                                    sWord = "123-456"
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 3:</strong> إضافة للـ vector<br>
+                                    vString.push_back("123-456")<br>
+                                    vString = ["M150", "Walaa", "123-456"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الخطوة 4:</strong> حذف الجزء المعالَج<br>
+                                    S1.erase(0, 7 + 4)  // نحذف "123-456#//#"<br>
+                                    S1 = "39"
+                                </div>
+                            </div>
+
+                            <pre>
+═══════════════════════════════════════════════════════════════
+الخروج من الـ LOOP
+═══════════════════════════════════════════════════════════════</pre>
+                            <div class="iteration-box">
+                                <div class="iteration-title">إيقاف التكرار</div>
+                                <div class="variable-state">
+                                    <strong>الحالة الحالية:</strong><br>
+                                    S1 = "39"<br>
+                                    vString = ["M150", "Walaa", "123-456"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الفحص:</strong> البحث عن الفاصل<br>
+                                    pos = S1.find("#//#")<br>
+                                    pos = string::npos  ← ما لقينا!<br>
+                                    → شرط الـ while loop صار FALSE<br>
+                                    → نخرج من الـ LOOP
+                                </div>
+                            </div>
+
+                            <pre>
+═══════════════════════════════════════════════════════════════
+بعد الـ LOOP: معالجة النص المتبقي
+═══════════════════════════════════════════════════════════════</pre>
+                            <div class="iteration-box">
+                                <div class="iteration-title">الخطوة النهائية</div>
+                                <div class="variable-state">
+                                    <strong>الفحص:</strong> هل S1 فاضي؟<br>
+                                    S1 = "39"  ← مش فاضي!<br>
+                                    if(S1 != "") → TRUE
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الإجراء:</strong> إضافة النص المتبقي<br>
+                                    vString.push_back("39")<br>
+                                    vString = ["M150", "Walaa", "123-456", "39"]
+                                </div>
+                                <div class="variable-state">
+                                    <strong>الإرجاع:</strong><br>
+                                    return vString;<br>
+                                    → ["M150", "Walaa", "123-456", "39"] ✅
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="color: #764ba2; margin: 30px 0 20px 0;">العملية الفرعية ب: ربط الحقول بالـ Struct</h4>
+
+                    <div class="code-header">دالة ConvertLineToRecord()</div>
+                    <div class="code-block">
+<pre><span class="keyword">stMember</span> <span class="function">ConvertLineToRecord</span>(<span class="keyword">string</span> Line, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>) {
+    
+    <span class="keyword">stMember</span> Member;                    <span class="comment">// ننشئ struct فاضي</span>
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vMemberData;       <span class="comment">// vector لحفظ الحقول المقسمة</span>
+    
+    <span class="comment">// الخطوة أ: نقسم السطر لحقول منفردة</span>
+    vMemberData = <span class="function">SplitString</span>(Line, Separator);
+    <span class="comment">// النتيجة: vMemberData = ["M150", "Walaa", "123-456", "39"]</span>
+    
+    <span class="comment">// الخطوة ب: نربط كل حقل من الـ vector بعضو في الـ struct</span>
+    Member.MemberId = vMemberData[<span class="number">0</span>];          <span class="comment">// "M150"</span>
+    Member.Name = vMemberData[<span class="number">1</span>];              <span class="comment">// "Walaa"</span>
+    Member.Phone = vMemberData[<span class="number">2</span>];             <span class="comment">// "123-456"</span>
+    Member.Age = <span class="function">stoi</span>(vMemberData[<span class="number">3</span>]);      <span class="comment">// "39" → 39 (تحويل نص لرقم)</span>
+    
+    <span class="keyword">return</span> Member;  <span class="comment">// نرجع الـ struct المعاد بناؤه</span>
+}</pre>
+                    </div>
+
+                    <div class="diagram-box">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">رسم توضيحي: تحويل String لـ Struct</h4>
+                        <pre>
+المدخلات: "M150#//#Walaa#//#123-456#//#39"
+        ↓
+    SplitString()
+        ↓
+┌─────────────────────────────────────────┐
+│  vector&lt;string&gt; vMemberData             │
+├─────────────────────────────────────────┤
+│  [0] = "M150"                           │
+│  [1] = "Walaa"                          │
+│  [2] = "123-456"                        │
+│  [3] = "39"                             │
+└─────────────────────────────────────────┘
+        ↓
+    ربط الحقول بالـ Struct
+        ↓
+┌─────────────────────────────────────────┐
+│       struct stMember                   │
+├─────────────────────────────────────────┤
+│  MemberId:  "M150"      ← vData[0]     │
+│  Name:      "Walaa"     ← vData[1]     │
+│  Phone:     "123-456"   ← vData[2]     │
+│  Age:       39          ← stoi(vData[3])│
+└─────────────────────────────────────────┘
+
+✅ تم إعادة بناء الـ Struct بالكامل!
+                        </pre>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4>⚡ مهم: دالة stoi()</h4>
+                        <p><strong>شو هي stoi()؟</strong></p>
+                        <p style="margin-top: 10px;">
+                            <strong>المعنى:</strong> "String TO Integer" (نص إلى رقم صحيح)<br>
+                            <strong>الهدف:</strong> تحويل النص اللي فيه رقم إلى رقم صحيح فعلي<br>
+                            <strong>مثال:</strong> stoi("39") ترجع الرقم الصحيح 39<br>
+                            <strong>ليش نحتاجها؟:</strong> العمر محفوظ كنص في الملف بس محتاجينه كرقم صحيح في الـ struct
+                        </p>
+                    </div>
+                </div>
+
+                <div class="success-box" style="margin-top: 30px;">
+                    <h3>✅ عملية التحميل اكتملت!</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">
+                        <strong>الملخص:</strong><br>
+                        1. بدأنا بملف نصي على القرص<br>
+                        2. فتحنا الملف وقرأنا كل سطر<br>
+                        3. قسمنا كل سطر: "M150#//#Walaa#//#123-456#//#39" → ["M150", "Walaa", "123-456", "39"]<br>
+                        4. ربطنا الحقول بأعضاء الـ struct<br>
+                        5. أضفنا الـ struct للـ vector<br>
+                        6. كررنا العملية لكل الأسطر<br>
+                        7. كل الأعضاء الآن في الذاكرة جاهزين للاستخدام! 🎉
+                    </p>
+                </div>
+            </section>
+
+            <!-- Complete Visual Summary -->
+            <section class="section">
+                <h2 class="section-title">🎯 ملخص بصري كامل</h2>
+
+                <div class="diagram-box">
+                    <pre>
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                        الدورة الكاملة                                    ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           الحفظ في الملف                                │
+└─────────────────────────────────────────────────────────────────────────┘
+
+  ذاكرة البرنامج (RAM)                          ملف على القرص
+        ↓                                              ↓
+┌──────────────────┐                          ┌──────────────────┐
+│  struct stMember │                          │   Members.txt    │
+│  ─────────────── │                          │  ──────────────  │
+│  ID:   "M150"    │                          │                  │
+│  Name: "Walaa"   │  ─── التحويل ────→       │  M150#//#Walaa   │
+│  Phone:"123-456" │  ConvertRecordToLine()   │  #//#123-456     │
+│  Age:  39        │                          │  #//#39          │
+└──────────────────┘                          └──────────────────┘
+                           ↓
+                    SaveToFile()
+                           ↓
+                  ✅ محفوظ بشكل دائم
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                          التحميل من الملف                               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+  ملف على القرص                               ذاكرة البرنامج (RAM)
+        ↓                                              ↓
+┌──────────────────┐                          ┌──────────────────┐
+│   Members.txt    │                          │  struct stMember │
+│  ──────────────  │                          │  ─────────────── │
+│  M150#//#Walaa   │  ─── التقسيم ────→       │  ID:   "M150"    │
+│  #//#123-456     │  SplitString()           │  Name: "Walaa"   │
+│  #//#39          │                          │  Phone:"123-456" │
+│                  │  ─── الربط ─────→        │  Age:  39        │
+└──────────────────┘  ConvertLineToRecord()  └──────────────────┘
+                           ↓
+                   push_back للـ vector
+                           ↓
+              ✅ جاهز للاستخدام في البرنامج
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                       ملخص الدوال الرئيسية                               ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+عمليات الحفظ:
+  1. ConvertRecordToLine(Member, "#//#")
+     → يحول الـ struct لنص مع فواصل
+  
+  2. SaveMemberDataLinetoFile(FileName, Line)
+     → يكتب النص في الملف
+
+عمليات التحميل:
+  1. LoadMembersDataFromFile(FileName)
+     → يفتح الملف، يقرأ كل الأسطر
+  
+  2. SplitString(Line, "#//#")
+     → يقسم النص المفصول إلى مصفوفة حقول
+  
+  3. ConvertLineToRecord(Line)
+     → يربط حقول المصفوفة بأعضاء الـ struct
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Key Takeaways -->
+            <section class="section">
+                <h2 class="section-title">💡 النقاط الأساسية</h2>
+
+                <div class="success-box">
+                    <h3>✨ فهم عمليات الملفات</h3>
+                    <ul style="margin-right: 20px; margin-top: 15px; font-size: 1.05em; line-height: 2;">
+                        <li><strong>الملفات تخزن النصوص فقط:</strong> لازم نحول البيانات المنظمة (struct) لنص قبل الحفظ</li>
+                        <li><strong>الفاصل مهم جداً:</strong> استخدم فاصل فريد مثل "#//#" لتجنب تضارب البيانات</li>
+                        <li><strong>التحويل ثنائي الاتجاه:</strong> Struct ↔ String لازم يشتغل بالاتجاهين</li>
+                        <li><strong>أوضاع الملف مهمة:</strong> استخدم ios::out|ios::app للإضافة الآمنة بدون مسح</li>
+                        <li><strong>تحويل الأنواع:</strong> تذكر تحويل النص لرقم صحيح لحقل العمر (stoi)</li>
+                        <li><strong>إدارة الموارد:</strong> دائماً أغلق الملفات بعد العمليات</li>
+                        <li><strong>ديمومة البيانات:</strong> عمليات الملف تمكن البيانات من البقاء بعد إعادة تشغيل البرنامج</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>🔍 دوال النصوص المهمة</h3>
+                    <table>
+                        <tr>
+                            <th>الدالة</th>
+                            <th>الهدف</th>
+                            <th>مثال</th>
+                        </tr>
+                        <tr>
+                            <td><code>find()</code></td>
+                            <td>البحث عن نص فرعي</td>
+                            <td><code>str.find("#//#")</code> ترجع الموقع أو npos</td>
+                        </tr>
+                        <tr>
+                            <td><code>substr()</code></td>
+                            <td>استخراج نص فرعي</td>
+                            <td><code>str.substr(0, 5)</code> تجيب أول 5 حروف</td>
+                        </tr>
+                        <tr>
+                            <td><code>erase()</code></td>
+                            <td>حذف حروف</td>
+                            <td><code>str.erase(0, 8)</code> تحذف أول 8 حروف</td>
+                        </tr>
+                        <tr>
+                            <td><code>to_string()</code></td>
+                            <td>تحويل رقم لنص</td>
+                            <td><code>to_string(39)</code> ترجع "39"</td>
+                        </tr>
+                        <tr>
+                            <td><code>stoi()</code></td>
+                            <td>تحويل نص لرقم صحيح</td>
+                            <td><code>stoi("39")</code> ترجع 39</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>⚡ ملاحظات الأداء</h3>
+                    <p style="font-size: 1.05em; margin-top: 10px;">
+                        <strong>ليش نحمل كل شي مرة وحدة؟</strong><br>
+                        • الوصول للقرص بطيء (ميلي ثانية)<br>
+                        • الوصول للذاكرة سريع (نانو ثانية)<br>
+                        • نحمل مرة واحدة ← نستخدم كتير من الذاكرة<br>
+                        • المقايضة: يستخدم ذاكرة أكتر بس يوفر وصول فوري للبحث والفرز والعرض
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="font-size: 1.5em; margin-bottom: 10px;">📂 <strong>شرح عمليات الملفات بالتفصيل</strong></p>
+            <p style="font-size: 1.1em;">دليل كامل خطوة بخطوة</p>
+            <p style="margin-top: 15px; font-size: 0.95em;">
+                فهم عمليات الحفظ والتحميل | معالجة الملفات في C++
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85em; opacity: 0.8;">
+                © 2025 | توثيق تعليمي مفصل
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('active');
+            
+            if(element.classList.contains('active')) {
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+    </script>
+</body>
+</html>

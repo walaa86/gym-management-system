@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفرق بين vector<string> و vector<stMember></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 2;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .header .subtitle {
+            font-size: 1.4em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            text-align: right;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border: 5px solid #ffc107;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .question-box h3 {
+            color: #856404;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .case-box {
+            background: white;
+            border: 5px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .case-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .code-snippet {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .highlight-type {
+            background: #ff9800;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        .reason-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-right: 6px solid #4caf50;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .reason-box h4 {
+            color: #2e7d32;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .diagram-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 35px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 4px solid #667eea;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.8;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .interactive-demo {
+            background: white;
+            border: 4px solid #9c27b0;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.25);
+        }
+
+        .demo-title {
+            background: #9c27b0;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .step-flow {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-right: 5px solid #9c27b0;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .step-flow h4 {
+            color: #4a148c;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 3em;
+            color: #667eea;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .summary-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: right;
+            font-size: 1.3em;
+        }
+
+        .summary-table td {
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+            font-size: 1.1em;
+        }
+
+        .summary-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .summary-table tr:hover {
+            background: #e3f2fd;
+            transition: all 0.3s ease;
+        }
+
+        .key-point {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border: 4px solid #ff9800;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .key-point h3 {
+            color: #e65100;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .visual-example {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 3px solid #2196f3;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .visual-example h4 {
+            color: #1565c0;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .code-highlight {
+            background: #fff3e0;
+            border-right: 4px solid #ff9800;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤔 الفرق بين vector&lt;string&gt; و vector&lt;stMember&gt;</h1>
+            <div class="subtitle">فهم عميق مع أمثلة تفاعلية</div>
+        </div>
+
+        <div class="content">
+
+            <!-- السؤال الأساسي -->
+            <section class="section">
+                <h2 class="section-title">❓ السؤال الأساسي</h2>
+                
+                <div class="question-box">
+                    <h3>ليش في مكان استخدمنا vector&lt;string&gt; وفي مكان ثاني vector&lt;stMember&gt;؟</h3>
+                    <p style="font-size: 1.3em; text-align: center; margin-top: 20px;">
+                        خلينا نفهم الفرق بالتفصيل الممل! 😊
+                    </p>
+                </div>
+            </section>
+
+            <!-- المقارنة السريعة -->
+            <section class="section">
+                <h2 class="section-title">⚡ المقارنة السريعة</h2>
+
+                <div class="comparison-container">
+                    <!-- الحالة الأولى -->
+                    <div class="case-box">
+                        <div class="case-header">الحالة 1️⃣</div>
+                        <h3 style="color: #667eea; text-align: center; margin-bottom: 20px;">ConvertLineToRecord()</h3>
+                        
+                        <div class="code-snippet">
+vector&lt;string&gt; vMemberData
+                        </div>
+                        
+                        <div class="highlight-type">النوع: vector&lt;string&gt;</div>
+                        
+                        <div class="reason-box">
+                            <h4>🎯 السبب:</h4>
+                            <p style="font-size: 1.15em;">
+                                لأنه بنقسّم <strong>سطر واحد</strong> لقطع نصية
+                            </p>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>مثال:</h4>
+                            <div class="code-highlight">
+Input: "M150#//#Walaa#//#123"<br>
+Output: ["M150", "Walaa", "123"]<br>
+         ↑ كل عنصر string
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الحالة الثانية -->
+                    <div class="case-box">
+                        <div class="case-header">الحالة 2️⃣</div>
+                        <h3 style="color: #667eea; text-align: center; margin-bottom: 20px;">LoadMembersDataFromFile()</h3>
+                        
+                        <div class="code-snippet">
+vector&lt;stMember&gt; vMembers
+                        </div>
+                        
+                        <div class="highlight-type">النوع: vector&lt;stMember&gt;</div>
+                        
+                        <div class="reason-box">
+                            <h4>🎯 السبب:</h4>
+                            <p style="font-size: 1.15em;">
+                                لأنه بنجمع <strong>كل الأعضاء</strong> (أعضاء كاملين)
+                            </p>
+                        </div>
+
+                        <div class="visual-example">
+                            <h4>مثال:</h4>
+                            <div class="code-highlight">
+Input: 3 أسطر من الملف<br>
+Output: [{M150}, {M151}, {M152}]<br>
+         ↑ كل عنصر stMember
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- الشرح التفصيلي: الحالة الأولى -->
+            <section class="section">
+                <h2 class="section-title">📝 الحالة الأولى: ConvertLineToRecord()</h2>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">رحلة تحويل سطر واحد</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 1: المدخل</h4>
+                        <div class="code-snippet">
+string Line = "M150#//#Walaa#//#123-456#//#39"
+                        </div>
+                        <p style="font-size: 1.1em; margin-top: 10px;">
+                            سطر واحد طويل من الملف
+                        </p>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 2: التقسيم (SplitString)</h4>
+                        <div class="code-snippet">
+vector&lt;string&gt; vMemberData = SplitString(Line, "#//#");
+                        </div>
+                        <p style="font-size: 1.1em; margin-top: 10px;">
+                            نقسّم السطر لقطع نصية صغيرة
+                        </p>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 النتيجة المؤقتة</h4>
+                        <div class="diagram-box">
+                            <pre>
+vMemberData = vector&lt;string&gt;
+┌─────────────────────────────────┐
+│ [0] = "M150"      ← string      │
+│ [1] = "Walaa"     ← string      │
+│ [2] = "123-456"   ← string      │
+│ [3] = "39"        ← string      │
+└─────────────────────────────────┘
+
+✅ كل عنصر في الـ vector هو نص (string)
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 3: التوزيع على struct</h4>
+                        <div class="code-snippet">
+Member.MemberId = vMemberData[0];  // "M150"
+Member.Name = vMemberData[1];      // "Walaa"
+Member.Phone = vMemberData[2];     // "123-456"
+Member.Age = stoi(vMemberData[3]); // "39" → 39
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 4: المخرج النهائي</h4>
+                        <div class="diagram-box">
+                            <pre>
+stMember Member = {
+    MemberId: "M150",
+    Name: "Walaa",
+    Phone: "123-456",
+    Age: 39
+}
+
+✅ عضو واحد كامل ومنظم!
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <h3>💡 النقطة الأساسية:</h3>
+                    <p style="font-size: 1.3em; line-height: 2.2;">
+                        <code>vector&lt;string&gt; vMemberData</code> هو <strong>مرحلة مؤقتة</strong><br>
+                        نستخدمه عشان نقسّم السطر لقطع صغيرة<br>
+                        بعدين نوزع هاي القطع على الـ <code>stMember</code>
+                    </p>
+                </div>
+            </section>
+
+            <!-- الشرح التفصيلي: الحالة الثانية -->
+            <section class="section">
+                <h2 class="section-title">📂 الحالة الثانية: LoadMembersDataFromFile()</h2>
+
+                <div class="interactive-demo">
+                    <div class="demo-title">رحلة تحميل كل الأعضاء</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 1: المدخل</h4>
+                        <div class="diagram-box">
+                            <pre>
+Members.txt
+┌──────────────────────────────────┐
+│ M150#//#Walaa#//#123-456#//#39   │ ← سطر 1
+│ M151#//#Ahmed#//#555-777#//#25   │ ← سطر 2
+│ M152#//#Sara#//#888-999#//#30    │ ← سطر 3
+└──────────────────────────────────┘
+
+ملف كامل فيه 3 أسطر
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 2: إنشاء مجموعة فاضية</h4>
+                        <div class="code-snippet">
+vector&lt;stMember&gt; vMembers;  // فاضي الآن
+                        </div>
+                        <p style="font-size: 1.1em; margin-top: 10px;">
+                            مجموعة عشان نحط فيها كل الأعضاء
+                        </p>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 3: Loop - السطر الأول</h4>
+                        <div class="code-snippet">
+Line = "M150#//#Walaa#//#123-456#//#39"
+Member = ConvertLineToRecord(Line);
+         ↓
+Member = {M150, Walaa, 123-456, 39}
+
+vMembers.push_back(Member);
+                        </div>
+                        <div class="diagram-box" style="margin-top: 15px;">
+                            <pre>
+vMembers = vector&lt;stMember&gt;
+┌─────────────────────────────────┐
+│ [0] = {M150, Walaa, ...}        │ ← stMember
+└─────────────────────────────────┘
+
+الحجم: 1
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 4: Loop - السطر الثاني</h4>
+                        <div class="code-snippet">
+Line = "M151#//#Ahmed#//#555-777#//#25"
+Member = ConvertLineToRecord(Line);
+         ↓
+Member = {M151, Ahmed, 555-777, 25}
+
+vMembers.push_back(Member);
+                        </div>
+                        <div class="diagram-box" style="margin-top: 15px;">
+                            <pre>
+vMembers = vector&lt;stMember&gt;
+┌─────────────────────────────────┐
+│ [0] = {M150, Walaa, ...}        │ ← stMember
+│ [1] = {M151, Ahmed, ...}        │ ← stMember
+└─────────────────────────────────┘
+
+الحجم: 2
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 5: Loop - السطر الثالث</h4>
+                        <div class="code-snippet">
+Line = "M152#//#Sara#//#888-999#//#30"
+Member = ConvertLineToRecord(Line);
+         ↓
+Member = {M152, Sara, 888-999, 30}
+
+vMembers.push_back(Member);
+                        </div>
+                        <div class="diagram-box" style="margin-top: 15px;">
+                            <pre>
+vMembers = vector&lt;stMember&gt;
+┌─────────────────────────────────┐
+│ [0] = {M150, Walaa, ...}        │ ← stMember
+│ [1] = {M151, Ahmed, ...}        │ ← stMember
+│ [2] = {M152, Sara, ...}         │ ← stMember
+└─────────────────────────────────┘
+
+الحجم: 3
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="arrow-down">↓</div>
+
+                    <div class="step-flow">
+                        <h4>🔹 الخطوة 6: المخرج النهائي</h4>
+                        <div class="code-snippet">
+return vMembers;  // كل الأعضاء جاهزين!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-point">
+                    <h3>💡 النقطة الأساسية:</h3>
+                    <p style="font-size: 1.3em; line-height: 2.2;">
+                        <code>vector&lt;stMember&gt; vMembers</code> هو <strong>المجموعة النهائية</strong><br>
+                        كل عنصر فيه هو <strong>عضو كامل</strong> (مش مجرد نص!)<br>
+                        نبني هاي المجموعة سطر سطر
+                    </p>
+                </div>
+            </section>
+
+            <!-- المقارنة الشاملة -->
+            <section class="section">
+                <h2 class="section-title">📊 المقارنة الشاملة</h2>
+
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>العنصر</th>
+                            <th>في ConvertLineToRecord()</th>
+                            <th>في LoadMembersDataFromFile()</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>اسم المتغير</strong></td>
+                            <td><code>vMemberData</code></td>
+                            <td><code>vMembers</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>النوع</strong></td>
+                            <td><code>vector&lt;string&gt;</code></td>
+                            <td><code>vector&lt;stMember&gt;</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>المدخل</strong></td>
+                            <td>سطر واحد</td>
+                            <td>ملف كامل (عدة أسطر)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>المحتوى</strong></td>
+                            <td>قطع نصية من سطر واحد</td>
+                            <td>أعضاء كاملين من كل الأسطر</td>
+                        </tr>
+                        <tr>
+                            <td><strong>مثال العنصر</strong></td>
+                            <td>"M150" (نص)</td>
+                            <td>{M150, Walaa, ...} (struct)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>الحجم</strong></td>
+                            <td>4 عناصر (لسطر واحد)</td>
+                            <td>3 عناصر (لـ 3 أسطر)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>الاستخدام</strong></td>
+                            <td>مرحلة مؤقتة للتقسيم</td>
+                            <td>النتيجة النهائية</td>
+                        </tr>
+                        <tr>
+                            <td><strong>الهدف</strong></td>
+                            <td>تقسيم سطر لقطع</td>
+                            <td>جمع كل الأعضاء</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- الرسم التوضيحي الشامل -->
+            <section class="section">
+                <h2 class="section-title">🎨 الرسم التوضيحي الشامل</h2>
+
+                <div class="diagram-box">
+                    <pre>
+╔═══════════════════════════════════════════════════════════════╗
+║           الفرق بين vector&lt;string&gt; و vector&lt;stMember&gt;        ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+في ConvertLineToRecord():
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+المهمة: تحويل سطر واحد
+
+Input:
+  string Line = "M150#//#Walaa#//#123-456#//#39"
+                         ↓
+                   SplitString()
+                         ↓
+  vector&lt;string&gt; vMemberData = ["M150", "Walaa", "123-456", "39"]
+      ↑                           ↑       ↑         ↑        ↑
+  نوع القطع                    كلهم نصوص (strings)
+                         ↓
+              نوزع على struct
+                         ↓
+  stMember Member = {M150, Walaa, 123-456, 39}
+      ↑
+   النتيجة النهائية
+
+
+في LoadMembersDataFromFile():
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+المهمة: تحميل كل الأعضاء
+
+Input:
+  Members.txt (3 أسطر)
+                         ↓
+         vector&lt;stMember&gt; vMembers = []  (فاضي)
+                         ↓
+        ┌────────────────┴────────────────┐
+        │                                 │
+   Loop 1: Line 1                    Loop 2: Line 2
+        │                                 │
+   ConvertLineToRecord()            ConvertLineToRecord()
+        │                                 │
+   {M150, Walaa, ...}               {M151, Ahmed, ...}
+        │                                 │
+   push_back                        push_back
+        │                                 │
+        └────────────────┬────────────────┘
+                         ↓
+  vector&lt;stMember&gt; vMembers = [{M150, ...}, {M151, ...}, {M152, ...}]
+      ↑                          ↑           ↑            ↑
+  نوع الأعضاء               كلهم أعضاء كاملين (stMember)
+
+
+الخلاصة:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+vector&lt;string&gt;:    قطع نصية من سطر واحد (مؤقت)
+vector&lt;stMember&gt;:  أعضاء كاملين من كل الأسطر (نهائي)
+                    </pre>
+                </div>
+            </section>
+
+            <!-- الخلاصة النهائية -->
+            <section class="section">
+                <h2 class="section-title">✨ الخلاصة النهائية</h2>
+
+                <div class="key-point">
+                    <h3>🎯 بالبساطة الشديدة:</h3>
+                    <div style="font-size: 1.3em; line-height: 2.5; margin-top: 20px;">
+                        <p><strong>1️⃣ في ConvertLineToRecord():</strong></p>
+                        <div class="code-highlight" style="margin: 15px 0;">
+سطر واحد → قطع نصية → عضو واحد<br>
+string → vector&lt;string&gt; → stMember
+                        </div>
+
+                        <p style="margin-top: 25px;"><strong>2️⃣ في LoadMembersDataFromFile():</strong></p>
+                        <div class="code-highlight" style="margin: 15px 0;">
+ملف كامل → كل الأسطر → كل الأعضاء<br>
+File → Loop → vector&lt;stMember&gt;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-box" style="margin-top: 30px;">
+                    <h4>💡 تذكري دائماً:</h4>
+                    <p style="font-size: 1.2em; line-height: 2.2;">
+                        ✅ <code>vector&lt;string&gt;</code> = قطع نصية (أجزاء من سطر)<br>
+                        ✅ <code>vector&lt;stMember&gt;</code> = أعضاء كاملين (من كل الملف)<br>
+                        ✅ الأول مؤقت، الثاني نهائي<br>
+                        ✅ الأول لسطر واحد، الثاني لكل الأسطر
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="font-size: 1.6em; margin-bottom: 10px;">🎯 الفرق بين vector&lt;string&gt; و vector&lt;stMember&gt;</p>
+            <p style="font-size: 1.2em;">فهم عميق مع أمثلة تفاعلية</p>
+            <p style="margin-top: 15px; font-size: 1em;">
+                الفهم الصحيح يبني قاعدة قوية!
+            </p>
+            <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">
+                © 2025 | رحلة الفهم العميق
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+GymProject
+GymProject01
+
+# Data files (optional - uncomment if you don't want to track data)
+# Members.txt
+# Clients.txt
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Mac specific
+.DS_Store
+._*
+
+# Windows specific
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Build directories
+build/
+bin/
+obj/

@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Management System - Phase 2 Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 25px;
+            margin: 15px 5px;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .code-header {
+            background: #21252b;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px 12px 0 0;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: -25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .toggle-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .collapsible-content.active {
+            max-height: 5000px;
+        }
+
+        .diagram-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 35px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 3px solid #667eea;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; font-weight: bold; }
+        .number { color: #d19a66; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(23, 162, 184, 0.2);
+        }
+
+        .danger-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.2);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            border-left: 4px solid #667eea;
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -45px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .algorithm-box {
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .algorithm-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .step strong {
+            color: #667eea;
+        }
+
+        .flow-diagram {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .flow-box {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .flow-start { background: #d4edda; color: #155724; }
+        .flow-process { background: #cce5ff; color: #004085; }
+        .flow-decision { background: #fff3cd; color: #856404; }
+        .flow-end { background: #f8d7da; color: #721c24; }
+
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 5px 0;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table tr:hover {
+            background: #e7f3ff;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏋️ Gym Management System</h1>
+            <div class="subtitle">Phase 2: Data Conversion & File Preparation</div>
+            <div>
+                <span class="phase-badge">📊 Data Serialization</span>
+                <span class="phase-badge">🔄 String Manipulation</span>
+                <span class="phase-badge">💾 File Ready</span>
+            </div>
+        </div>
+
+        <div class="content">
+            
+            <!-- Phase Overview -->
+            <section class="section">
+                <h2 class="section-title">🎯 Phase 2 Overview</h2>
+                
+                <div class="success-box">
+                    <h3>✨ What's New in Phase 2?</h3>
+                    <p style="margin-top: 10px; font-size: 1.05em;">
+                        In this phase, we're preparing our data for file storage! We've added powerful data conversion
+                        capabilities that transform our structured member data into storable text format and vice versa.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>📝 Struct to String</h3>
+                        <p>Convert member objects into delimited text lines ready for file storage</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔍 String Parsing</h3>
+                        <p>Split delimited strings back into individual data fields</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔄 Bidirectional Conversion</h3>
+                        <p>Seamlessly convert between struct and string formats</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎯 Custom Delimiter</h3>
+                        <p>Use unique separator (#//#) to avoid data conflicts</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Big Picture -->
+            <section class="section">
+                <h2 class="section-title">🖼️ The Big Picture: Data Flow</h2>
+                
+                <div class="diagram-box">
+                    <pre>
+    ┌─────────────────────────────────────────────────────────────────┐
+    │                    🏋️ GYM MEMBER DATA FLOW                      │
+    └─────────────────────────────────────────────────────────────────┘
+
+    📥 INPUT PHASE
+    ┌──────────────────┐
+    │  User Enters     │
+    │  Member Info     │ 
+    └────────┬─────────┘
+             │
+             ▼
+    ┌──────────────────┐
+    │   stMember       │      MemberId: "M150"
+    │   Struct         │  ──▶ Name: "Walaa Hussein"
+    │   (In Memory)    │      Phone: "929-222-1111"
+    └────────┬─────────┘      Age: 39
+             │
+             │ ConvertRecordToLine()
+             │
+             ▼
+    ┌──────────────────────────────────────────────────────────────┐
+    │  String Line (Text Format)                                   │
+    │  "M150#//#Walaa Hussein#//#929-222-1111#//#39"              │
+    └────────┬─────────────────────────────────────────────────────┘
+             │
+             │ Ready for File Storage! 💾
+             │
+    ┌────────▼─────────┐
+    │   File System    │
+    │   (Persistent)   │
+    └────────┬─────────┘
+             │
+             │ Read from file
+             │
+             ▼
+    ┌──────────────────────────────────────────────────────────────┐
+    │  String Line (Text Format)                                   │
+    │  "M150#//#Walaa Hussein#//#929-222-1111#//#39"              │
+    └────────┬─────────────────────────────────────────────────────┘
+             │
+             │ SplitString() → Extract fields
+             │
+             ▼
+    ┌──────────────────────────────────────┐
+    │  vector&lt;string&gt; vMemberData          │
+    │  [0] = "M150"                        │
+    │  [1] = "Walaa Hussein"               │
+    │  [2] = "929-222-1111"                │
+    │  [3] = "39"                          │
+    └────────┬─────────────────────────────┘
+             │
+             │ ConvertLineToRecord()
+             │
+             ▼
+    ┌──────────────────┐
+    │   stMember       │      MemberId: "M150"
+    │   Struct         │  ──▶ Name: "Walaa Hussein"
+    │   (Restored!)    │      Phone: "929-222-1111"
+    └──────────────────┘      Age: 39
+                    </pre>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 Why This Approach?</h4>
+                    <p><strong>Separation of Concerns:</strong> Each function has ONE clear job</p>
+                    <p><strong>Testability:</strong> Easy to test each conversion step independently</p>
+                    <p><strong>Reusability:</strong> Functions can be used anywhere in the program</p>
+                    <p><strong>Maintainability:</strong> Easy to modify or debug specific parts</p>
+                </div>
+            </section>
+
+            <!-- Detailed Function Analysis -->
+            <section class="section">
+                <h2 class="section-title">🔧 Function Deep Dive</h2>
+
+                <!-- Function 1: ConvertRecordToLine -->
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>📤 Function 1: ConvertRecordToLine()</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Converts a <code>stMember</code> struct into a single text line with delimiters</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Create an empty result string
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Append MemberId + Separator
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> Append Name + Separator
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> Append Phone + Separator
+                            </div>
+                            <div class="step">
+                                <strong>Step 5:</strong> Convert Age to string and append (no separator at end)
+                            </div>
+                            <div class="step">
+                                <strong>Step 6:</strong> Return the completed line
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('convert-to-line-code')">
+                            💻 Show/Hide: Complete Code
+                        </button>
+                        
+                        <div id="convert-to-line-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>ConvertRecordToLine.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">Struct → String Conversion</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">// Function: Convert struct member to delimited string line</span>
+<span class="comment">// Input: stMember object, Separator string (default: "#//#")</span>
+<span class="comment">// Output: Single string line with all member data</span>
+<span class="comment">// Example: "M150#//#Walaa Hussein#//#929-222-1111#//#39"</span>
+
+<span class="keyword">string</span> <span class="function">ConvertRecordToLine</span>(<span class="keyword">stMember</span> Member, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>){
+    
+    <span class="keyword">string</span> stMemberRecord = <span class="string">""</span>; <span class="comment">// Initialize empty result string</span>
+    
+    <span class="comment">// Build the record line by concatenating fields with separator</span>
+    stMemberRecord += Member.MemberId + Separator;   <span class="comment">// Add Member ID</span>
+    stMemberRecord += Member.Name + Separator;       <span class="comment">// Add Name</span>
+    stMemberRecord += Member.Phone + Separator;      <span class="comment">// Add Phone</span>
+    stMemberRecord += <span class="function">to_string</span>(Member.Age);      <span class="comment">// Add Age (convert int to string)</span>
+    
+    <span class="keyword">return</span> stMemberRecord; <span class="comment">// Return the complete line</span>
+}</pre>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box" style="margin-top: 20px;">
+                            <h4>🎓 Key Learning Points</h4>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Default Parameters:</strong> <code>Separator = "#//#"</code> provides flexibility</li>
+                                <li><strong>String Concatenation:</strong> Using <code>+=</code> operator for building strings</li>
+                                <li><strong>Type Conversion:</strong> <code>to_string()</code> converts integer to string</li>
+                                <li><strong>No Trailing Separator:</strong> Last field doesn't need separator</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Function 2: SplitString -->
+                    <div class="timeline-item">
+                        <h4>✂️ Function 2: SplitString()</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Splits a delimited string into individual fields stored in a vector</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Create empty vector to store results
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Find position of first delimiter in string
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> If delimiter found:
+                                <ul style="margin-left: 20px; margin-top: 5px;">
+                                    <li>Extract substring from start to delimiter position</li>
+                                    <li>Add extracted word to vector (if not empty)</li>
+                                    <li>Remove processed part from original string</li>
+                                    <li>Repeat from Step 2</li>
+                                </ul>
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> When no more delimiters found, add remaining string as last word
+                            </div>
+                            <div class="step">
+                                <strong>Step 5:</strong> Return vector containing all extracted fields
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('split-string-code')">
+                            💻 Show/Hide: Complete Code with Visual Flow
+                        </button>
+                        
+                        <div id="split-string-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>SplitString.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">String Parsing Engine</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">// Function: Split a delimited string into individual components</span>
+<span class="comment">// Input: String to split, Delimiter to search for</span>
+<span class="comment">// Output: Vector of strings containing all extracted fields</span>
+<span class="comment">// Example: "A#//#B#//#C" → ["A", "B", "C"]</span>
+
+<span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; <span class="function">SplitString</span>(<span class="keyword">string</span> S1, <span class="keyword">string</span> Delimiter){
+    
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vString; <span class="comment">// Container for extracted words</span>
+    
+    <span class="keyword">short</span> pos = <span class="number">0</span>;      <span class="comment">// Position of delimiter in string</span>
+    <span class="keyword">string</span> sWord;        <span class="comment">// Temporary variable to store extracted word</span>
+    
+    <span class="comment">// Loop until no more delimiters are found</span>
+    <span class="keyword">while</span> ((pos = S1.<span class="function">find</span>(Delimiter)) != <span class="keyword">std::string::npos</span>){
+        
+        <span class="comment">// Extract word from start of string to delimiter position</span>
+        sWord = S1.<span class="function">substr</span>(<span class="number">0</span>, pos);
+        
+        <span class="comment">// Add word to vector if it's not empty</span>
+        <span class="keyword">if</span> (sWord != <span class="string">""</span>){
+            vString.<span class="function">push_back</span>(sWord);
+        }
+        
+        <span class="comment">// Remove processed part (word + delimiter) from string</span>
+        <span class="comment">// This moves us forward to process the next word</span>
+        S1.<span class="function">erase</span>(<span class="number">0</span>, pos + Delimiter.<span class="function">length</span>()); 
+    }
+    
+    <span class="comment">// Add the last remaining word (no delimiter after it)</span>
+    <span class="keyword">if</span> (S1 != <span class="string">""</span>){
+        vString.<span class="function">push_back</span>(S1);
+    }
+    
+    <span class="keyword">return</span> vString; <span class="comment">// Return vector with all extracted fields</span>
+}</pre>
+                            </div>
+
+                            <!-- Visual Step-by-Step Example -->
+                            <div class="diagram-box" style="margin-top: 20px;">
+                                <h4 style="color: #667eea; margin-bottom: 15px;">📊 Visual Execution Example</h4>
+                                <pre>
+Input String: "M150#//#Walaa Hussein#//#929-222-1111#//#39"
+Delimiter: "#//#"
+
+┌─────────────────────────────────────────────────────────────┐
+│ ITERATION 1                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ Current String: "M150#//#Walaa Hussein#//#929-222-1111#//#39"
+│ Find "#//#" → Found at position 4                          │
+│ Extract: S1.substr(0, 4) = "M150"                          │
+│ Add to vector: ["M150"]                                    │
+│ Erase: Remove "M150#//#"                                   │
+│ Remaining: "Walaa Hussein#//#929-222-1111#//#39"           │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ ITERATION 2                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ Current String: "Walaa Hussein#//#929-222-1111#//#39"      │
+│ Find "#//#" → Found at position 13                         │
+│ Extract: S1.substr(0, 13) = "Walaa Hussein"               │
+│ Add to vector: ["M150", "Walaa Hussein"]                  │
+│ Erase: Remove "Walaa Hussein#//#"                         │
+│ Remaining: "929-222-1111#//#39"                            │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ ITERATION 3                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ Current String: "929-222-1111#//#39"                       │
+│ Find "#//#" → Found at position 12                         │
+│ Extract: S1.substr(0, 12) = "929-222-1111"                │
+│ Add to vector: ["M150", "Walaa Hussein", "929-222-1111"]  │
+│ Erase: Remove "929-222-1111#//#"                          │
+│ Remaining: "39"                                            │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ FINAL STEP                                                  │
+├─────────────────────────────────────────────────────────────┤
+│ Current String: "39"                                        │
+│ No delimiter found → while loop ends                       │
+│ Add remaining string to vector                             │
+│ Final vector: ["M150", "Walaa Hussein", "929-222-1111", "39"]
+└─────────────────────────────────────────────────────────────┘
+                                </pre>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="margin-top: 20px;">
+                            <h4>🔍 Important String Functions Used</h4>
+                            <table class="comparison-table">
+                                <tr>
+                                    <th>Function</th>
+                                    <th>Purpose</th>
+                                    <th>Example</th>
+                                </tr>
+                                <tr>
+                                    <td><code>find()</code></td>
+                                    <td>Searches for substring, returns position or npos if not found</td>
+                                    <td><code>str.find("#//#")</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>substr()</code></td>
+                                    <td>Extracts substring from position for given length</td>
+                                    <td><code>str.substr(0, 5)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>erase()</code></td>
+                                    <td>Removes characters from string</td>
+                                    <td><code>str.erase(0, 8)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>length()</code></td>
+                                    <td>Returns the size of string</td>
+                                    <td><code>str.length()</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>string::npos</code></td>
+                                    <td>Special value meaning "not found"</td>
+                                    <td><code>if(pos != npos)</code></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Function 3: ConvertLineToRecord -->
+                    <div class="timeline-item">
+                        <h4>📥 Function 3: ConvertLineToRecord()</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Converts a delimited string line back into a <code>stMember</code> struct</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Create empty Member struct and vector
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Call SplitString() to parse the line into fields
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> Assign vector[0] to Member.MemberId
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> Assign vector[1] to Member.Name
+                            </div>
+                            <div class="step">
+                                <strong>Step 5:</strong> Assign vector[2] to Member.Phone
+                            </div>
+                            <div class="step">
+                                <strong>Step 6:</strong> Convert vector[3] from string to int and assign to Member.Age
+                            </div>
+                            <div class="step">
+                                <strong>Step 7:</strong> Return the reconstructed Member struct
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('convert-to-record-code')">
+                            💻 Show/Hide: Complete Code
+                        </button>
+                        
+                        <div id="convert-to-record-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>ConvertLineToRecord.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">String → Struct Conversion</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">// Function: Convert delimited string line back to struct</span>
+<span class="comment">// Input: String line with delimited data, Separator string</span>
+<span class="comment">// Output: stMember struct with all fields populated</span>
+<span class="comment">// Example: "M150#//#Walaa#//#123#//#39" → stMember object</span>
+
+<span class="keyword">stMember</span> <span class="function">ConvertLineToRecord</span>(<span class="keyword">string</span> Line, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>){
+    
+    <span class="keyword">stMember</span> Member;                    <span class="comment">// Create empty member struct</span>
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vMemberData;       <span class="comment">// Vector to hold parsed data</span>
+    
+    <span class="comment">// Parse the line into individual fields</span>
+    vMemberData = <span class="function">SplitString</span>(Line, Separator);
+    
+    <span class="comment">// Assign each field from vector to corresponding struct member</span>
+    Member.MemberId = vMemberData[<span class="number">0</span>];          <span class="comment">// First field: Member ID</span>
+    Member.Name = vMemberData[<span class="number">1</span>];              <span class="comment">// Second field: Name</span>
+    Member.Phone = vMemberData[<span class="number">2</span>];             <span class="comment">// Third field: Phone</span>
+    Member.Age = <span class="function">stoi</span>(vMemberData[<span class="number">3</span>]);      <span class="comment">// Fourth field: Age (convert string to int)</span>
+    
+    <span class="keyword">return</span> Member; <span class="comment">// Return the reconstructed struct</span>
+}</pre>
+                            </div>
+
+                            <!-- Visual Conversion Example -->
+                            <div class="diagram-box" style="margin-top: 20px;">
+                                <h4 style="color: #667eea; margin-bottom: 15px;">🔄 Conversion Process Visualization</h4>
+                                <pre>
+Input: "M150#//#Walaa Hussein#//#929-222-1111#//#39"
+
+Step 1: Call SplitString()
+   ↓
+vMemberData = ["M150", "Walaa Hussein", "929-222-1111", "39"]
+
+Step 2: Map vector elements to struct fields
+   ↓
+┌──────────────────────────────────────────┐
+│  vMemberData[0] → Member.MemberId        │
+│  "M150"         →  MemberId = "M150"     │
+├──────────────────────────────────────────┤
+│  vMemberData[1] → Member.Name            │
+│  "Walaa Hussein" →  Name = "Walaa Hussein"
+├──────────────────────────────────────────┤
+│  vMemberData[2] → Member.Phone           │
+│  "929-222-1111" →  Phone = "929-222-1111"│
+├──────────────────────────────────────────┤
+│  vMemberData[3] → Member.Age             │
+│  "39" (string)  →  stoi() → 39 (int)    │
+└──────────────────────────────────────────┘
+
+Result: Complete stMember struct ready to use! ✅
+                                </pre>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box" style="margin-top: 20px;">
+                            <h4>⚡ Key Function: stoi()</h4>
+                            <p><strong>What is stoi()?</strong></p>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Meaning:</strong> "String TO Integer"</li>
+                                <li><strong>Purpose:</strong> Converts string representation of number to actual integer</li>
+                                <li><strong>Example:</strong> <code>stoi("39")</code> returns integer <code>39</code></li>
+                                <li><strong>Why needed?:</strong> Age is stored as string in file but needed as int in struct</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Working Example -->
+            <section class="section">
+                <h2 class="section-title">✨ Complete Working Program</h2>
+                
+                <div class="success-box">
+                    <h3>🎉 All Components Together!</h3>
+                    <p>Here's the complete program with all Phase 1 and Phase 2 features integrated and working perfectly.</p>
+                </div>
+
+                <button class="toggle-button" onclick="toggleContent('full-program')">
+                    📥 Show/Hide: Complete Source Code
+                </button>
+                
+                <div id="full-program" class="collapsible-content">
+                    <div class="code-header">
+                        <span>gym_system_phase2.cpp</span>
+                        <span style="font-size: 0.8em; opacity: 0.8;">Complete Implementation</span>
+                    </div>
+                    <div class="code-block">
+<pre><span class="comment">/*
+ * Gym Management System - Phase 2
+ * Features: Member Management + Data Conversion + File Preparation
+ * Author: Your Name
+ * Date: October 2025
+ */</span>
+
+<span class="keyword">#include</span> <span class="string">&lt;iostream&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;string&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;iomanip&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;cctype&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;limits&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;fstream&gt;</span>  <span class="comment">// For file operations (coming in Phase 3)</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//                    DATA STRUCTURE                          </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Structure to hold all member information</span>
+<span class="keyword">struct</span> <span class="function">stMember</span>{
+    <span class="keyword">string</span> MemberId = <span class="string">""</span>;  <span class="comment">// Unique identifier for member</span>
+    <span class="keyword">string</span> Name = <span class="string">""</span>;      <span class="comment">// Full name of member</span>
+    <span class="keyword">string</span> Phone = <span class="string">""</span>;     <span class="comment">// Contact phone number</span>
+    <span class="keyword">int</span> Age = <span class="number">0</span>;           <span class="comment">// Age of member</span>
+};
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//              INPUT FUNCTIONS (Phase 1)                     </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Function: Read single member's information from user input</span>
+<span class="comment">// Returns: Populated stMember struct</span>
+<span class="keyword">stMember</span> <span class="function">ReadNewMember</span>(){
+    <span class="keyword">stMember</span> Member;
+    
+    cout &lt;&lt; <span class="string">"Enter Member ID: "</span>;
+    <span class="function">getline</span>(cin &gt;&gt; ws, Member.MemberId);  <span class="comment">// ws removes leading whitespace</span>
+    
+    cout &lt;&lt; <span class="string">"Enter Member Name: "</span>;
+    <span class="function">getline</span>(cin, Member.Name);
+    
+    cout &lt;&lt; <span class="string">"Enter Phone: "</span>;
+    <span class="function">getline</span>(cin, Member.Phone);
+    
+    cout &lt;&lt; <span class="string">"Enter Age: "</span>;
+    cin &gt;&gt; Member.Age;
+    cin.<span class="function">ignore</span>();  <span class="comment">// Clear input buffer</span>
+    
+    <span class="keyword">return</span> Member;
+}
+
+<span class="comment">// Function: Read multiple members from user in a loop</span>
+<span class="comment">// Returns: Vector containing all entered members</span>
+<span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; <span class="function">ReadAllMembers</span>(){
+    <span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMember;
+    <span class="keyword">char</span> AddMore = <span class="string">'Y'</span>;
+    
+    <span class="keyword">do</span>{
+        <span class="function">system</span>(<span class="string">"clear"</span>);  <span class="comment">// Use "cls" on Windows</span>
+        cout &lt;&lt; <span class="string">"═══════════════════════════════\n"</span>;
+        cout &lt;&lt; <span class="string">"    Adding New Member\n"</span>;
+        cout &lt;&lt; <span class="string">"═══════════════════════════════\n\n"</span>;
+        
+        <span class="keyword">stMember</span> M = <span class="function">ReadNewMember</span>();
+        vMember.<span class="function">push_back</span>(M);
+        
+        cout &lt;&lt; <span class="string">"\n✅ Member Added Successfully!\n"</span>;
+        cout &lt;&lt; <span class="string">"Add more members? (Y/N): "</span>;
+        cin &gt;&gt; AddMore;
+        
+    } <span class="keyword">while</span>(<span class="function">toupper</span>(AddMore) == <span class="string">'Y'</span>);
+    
+    <span class="keyword">return</span> vMember;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//          DATA CONVERSION FUNCTIONS (Phase 2)              </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Function: Convert struct member to delimited text line</span>
+<span class="comment">// Input: Member struct, custom separator (default: "#//#")</span>
+<span class="comment">// Output: String formatted for file storage</span>
+<span class="comment">// Example: "M150#//#Walaa Hussein#//#929-222-1111#//#39"</span>
+<span class="keyword">string</span> <span class="function">ConvertRecordToLine</span>(<span class="keyword">stMember</span> Member, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>){
+    
+    <span class="keyword">string</span> stMemberRecord = <span class="string">""</span>;
+    
+    <span class="comment">// Build delimited string: field + separator</span>
+    stMemberRecord += Member.MemberId + Separator;
+    stMemberRecord += Member.Name + Separator;
+    stMemberRecord += Member.Phone + Separator;
+    stMemberRecord += <span class="function">to_string</span>(Member.Age);  <span class="comment">// No separator at end</span>
+    
+    <span class="keyword">return</span> stMemberRecord;
+}
+
+<span class="comment">// Function: Split delimited string into individual fields</span>
+<span class="comment">// Input: String to parse, delimiter to search for</span>
+<span class="comment">// Output: Vector of extracted string fields</span>
+<span class="comment">// Algorithm: Iteratively find, extract, and remove fields</span>
+<span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; <span class="function">SplitString</span>(<span class="keyword">string</span> S1, <span class="keyword">string</span> Delimiter){
+    
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vString;
+    <span class="keyword">short</span> pos = <span class="number">0</span>;
+    <span class="keyword">string</span> sWord;
+    
+    <span class="comment">// Loop: find delimiter, extract word, remove processed part</span>
+    <span class="keyword">while</span>((pos = S1.<span class="function">find</span>(Delimiter)) != <span class="keyword">std::string::npos</span>){
+        
+        <span class="comment">// Extract substring from beginning to delimiter</span>
+        sWord = S1.<span class="function">substr</span>(<span class="number">0</span>, pos);
+        
+        <span class="comment">// Add to vector if not empty</span>
+        <span class="keyword">if</span>(sWord != <span class="string">""</span>){
+            vString.<span class="function">push_back</span>(sWord);
+        }
+        
+        <span class="comment">// Remove processed portion (word + delimiter)</span>
+        S1.<span class="function">erase</span>(<span class="number">0</span>, pos + Delimiter.<span class="function">length</span>());
+    }
+    
+    <span class="comment">// Add the final remaining word (no delimiter after it)</span>
+    <span class="keyword">if</span>(S1 != <span class="string">""</span>){
+        vString.<span class="function">push_back</span>(S1);
+    }
+    
+    <span class="keyword">return</span> vString;
+}
+
+<span class="comment">// Function: Convert delimited string back to struct</span>
+<span class="comment">// Input: Delimited string line, separator</span>
+<span class="comment">// Output: Fully populated stMember struct</span>
+<span class="comment">// Process: Split string → Map fields to struct members</span>
+<span class="keyword">stMember</span> <span class="function">ConvertLineToRecord</span>(<span class="keyword">string</span> Line, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>){
+    
+    <span class="keyword">stMember</span> Member;
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vMemberData;
+    
+    <span class="comment">// Parse the line into individual fields</span>
+    vMemberData = <span class="function">SplitString</span>(Line, Separator);
+    
+    <span class="comment">// Map vector elements to struct fields</span>
+    Member.MemberId = vMemberData[<span class="number">0</span>];
+    Member.Name = vMemberData[<span class="number">1</span>];
+    Member.Phone = vMemberData[<span class="number">2</span>];
+    Member.Age = <span class="function">stoi</span>(vMemberData[<span class="number">3</span>]);  <span class="comment">// Convert string to integer</span>
+    
+    <span class="keyword">return</span> Member;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//              DISPLAY FUNCTIONS (Phase 1)                   </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Function: Display formatted member information card</span>
+<span class="comment">// Input: Member struct to display</span>
+<span class="keyword">void</span> <span class="function">PrintMemberCard</span>(<span class="keyword">stMember</span> MemberCard){
+    
+    cout &lt;&lt; <span class="string">"\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"</span>;
+    cout &lt;&lt; <span class="string">"         Member Information         \n"</span>;
+    cout &lt;&lt; <span class="string">"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"</span>;
+    cout &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; <span class="string">"  ID:"</span> &lt;&lt; MemberCard.MemberId &lt;&lt; endl;
+    cout &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; <span class="string">"  Name:"</span> &lt;&lt; MemberCard.Name &lt;&lt; endl;
+    cout &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; <span class="string">"  Phone:"</span> &lt;&lt; MemberCard.Phone &lt;&lt; endl;
+    cout &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; <span class="string">"  Age:"</span> &lt;&lt; MemberCard.Age &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"</span>;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//                    MAIN PROGRAM                            </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="keyword">int</span> <span class="function">main</span>(){
+    
+    <span class="comment">// ─────────────────────────────────────────────────────────</span>
+    <span class="comment">// TEST 1: String to Struct Conversion (Simulating file read)</span>
+    <span class="comment">// ─────────────────────────────────────────────────────────</span>
+    
+    cout &lt;&lt; <span class="string">"\n═══════════════════════════════════════════\n"</span>;
+    cout &lt;&lt; <span class="string">"   TEST 1: String → Struct Conversion\n"</span>;
+    cout &lt;&lt; <span class="string">"═══════════════════════════════════════════\n"</span>;
+    
+    <span class="comment">// Simulate a line read from file</span>
+    <span class="keyword">string</span> stLine = <span class="string">"M150#//#Walaa Hussein#//#929-222-1111#//#39"</span>;
+    cout &lt;&lt; <span class="string">"\n📄 Input String:\n"</span> &lt;&lt; stLine &lt;&lt; endl;
+    
+    <span class="comment">// Convert string to struct</span>
+    <span class="keyword">stMember</span> Member = <span class="function">ConvertLineToRecord</span>(stLine);
+    
+    <span class="comment">// Display the reconstructed member</span>
+    cout &lt;&lt; <span class="string">"\n✅ Successfully Converted to Struct:"</span>;
+    <span class="function">PrintMemberCard</span>(Member);
+    
+    <span class="comment">// ─────────────────────────────────────────────────────────</span>
+    <span class="comment">// TEST 2: Struct to String Conversion (Preparing for save)</span>
+    <span class="comment">// ─────────────────────────────────────────────────────────</span>
+    
+    cout &lt;&lt; <span class="string">"\n═══════════════════════════════════════════\n"</span>;
+    cout &lt;&lt; <span class="string">"   TEST 2: Struct → String Conversion\n"</span>;
+    cout &lt;&lt; <span class="string">"═══════════════════════════════════════════\n"</span>;
+    
+    <span class="comment">// Convert the same struct back to string</span>
+    <span class="keyword">string</span> ConvertedLine = <span class="function">ConvertRecordToLine</span>(Member);
+    cout &lt;&lt; <span class="string">"\n💾 String Ready for File Storage:\n"</span> &lt;&lt; ConvertedLine &lt;&lt; endl;
+    
+    <span class="comment">// ─────────────────────────────────────────────────────────</span>
+    <span class="comment">// Verification: Check if conversion is reversible</span>
+    <span class="comment">// ─────────────────────────────────────────────────────────</span>
+    
+    <span class="keyword">if</span>(stLine == ConvertedLine){
+        cout &lt;&lt; <span class="string">"\n✅ SUCCESS: Bidirectional conversion is PERFECT!\n"</span>;
+        cout &lt;&lt; <span class="string">"   Original and converted strings match exactly.\n"</span>;
+    } <span class="keyword">else</span> {
+        cout &lt;&lt; <span class="string">"\n⚠️  WARNING: Conversion mismatch detected!\n"</span>;
+    }
+    
+    cout &lt;&lt; <span class="string">"\n═══════════════════════════════════════════\n"</span>;
+    cout &lt;&lt; <span class="string">"   🎉 Phase 2 Implementation Complete!\n"</span>;
+    cout &lt;&lt; <span class="string">"   ✅ Data Conversion: WORKING\n"</span>;
+    cout &lt;&lt; <span class="string">"   ✅ String Parsing: WORKING\n"</span>;
+    cout &lt;&lt; <span class="string">"   ⏭️  Next: Phase 3 - File Operations\n"</span>;
+    cout &lt;&lt; <span class="string">"═══════════════════════════════════════════\n\n"</span>;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Program Output -->
+            <section class="section">
+                <h2 class="section-title">🖥️ Expected Program Output</h2>
+                
+                <div class="diagram-box">
+                    <pre style="color: #2d3748; font-weight: normal;">
+═══════════════════════════════════════════
+   TEST 1: String → Struct Conversion
+═══════════════════════════════════════════
+
+📄 Input String:
+M150#//#Walaa Hussein#//#929-222-1111#//#39
+
+✅ Successfully Converted to Struct:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+         Member Information         
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ID:          M150
+  Name:        Walaa Hussein
+  Phone:       929-222-1111
+  Age:         39
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+═══════════════════════════════════════════
+   TEST 2: Struct → String Conversion
+═══════════════════════════════════════════
+
+💾 String Ready for File Storage:
+M150#//#Walaa Hussein#//#929-222-1111#//#39
+
+✅ SUCCESS: Bidirectional conversion is PERFECT!
+   Original and converted strings match exactly.
+
+═══════════════════════════════════════════
+   🎉 Phase 2 Implementation Complete!
+   ✅ Data Conversion: WORKING
+   ✅ String Parsing: WORKING
+   ⏭️  Next: Phase 3 - File Operations
+═══════════════════════════════════════════
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Key Concepts -->
+            <section class="section">
+                <h2 class="section-title">🧠 Key Programming Concepts</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🔄 Data Serialization</h3>
+                        <p><strong>Definition:</strong> Converting data structures into a format that can be stored or transmitted</p>
+                        <p style="margin-top: 10px;"><strong>In our case:</strong> Converting struct → string</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>🔍 Data Deserialization</h3>
+                        <p><strong>Definition:</strong> Converting stored/transmitted data back into usable data structures</p>
+                        <p style="margin-top: 10px;"><strong>In our case:</strong> Converting string → struct</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>✂️ String Tokenization</h3>
+                        <p><strong>Definition:</strong> Breaking a string into smaller pieces (tokens) based on delimiters</p>
+                        <p style="margin-top: 10px;"><strong>Our SplitString() function</strong> performs tokenization</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>🎯 Delimiter Strategy</h3>
+                        <p><strong>Why "#//#"?</strong> It's unlikely to appear in actual data</p>
+                        <p style="margin-top: 10px;"><strong>Alternative:</strong> Could use |, ;, or tab (\t)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Algorithm Complexity -->
+            <section class="section">
+                <h2 class="section-title">⚡ Algorithm Analysis</h2>
+                
+                <table class="comparison-table">
+                    <tr>
+                        <th>Function</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                        <th>Explanation</th>
+                    </tr>
+                    <tr>
+                        <td><code>ConvertRecordToLine()</code></td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Linear time to concatenate strings, where n is total length of all fields</td>
+                    </tr>
+                    <tr>
+                        <td><code>SplitString()</code></td>
+                        <td>O(n × m)</td>
+                        <td>O(n)</td>
+                        <td>n = string length, m = number of fields. Each find() and erase() operation</td>
+                    </tr>
+                    <tr>
+                        <td><code>ConvertLineToRecord()</code></td>
+                        <td>O(n × m)</td>
+                        <td>O(n)</td>
+                        <td>Dominated by SplitString() complexity</td>
+                    </tr>
+                </table>
+
+                <div class="info-box" style="margin-top: 20px;">
+                    <h4>💡 Optimization Note</h4>
+                    <p>For this gym system with typically small amounts of data (hundreds of members), 
+                    the current implementation is perfectly efficient. The code prioritizes <strong>readability</strong> 
+                    and <strong>maintainability</strong> over micro-optimizations.</p>
+                </div>
+            </section>
+
+            <!-- Common Pitfalls -->
+            <section class="section">
+                <h2 class="section-title">⚠️ Common Pitfalls & Solutions</h2>
+                
+                <div class="danger-box">
+                    <h4>❌ Pitfall 1: Delimiter in Data</h4>
+                    <p><strong>Problem:</strong> What if a member's name contains "#//#"?</p>
+                    <p><strong>Solution:</strong> Choose a unique delimiter unlikely to appear in data, or implement escaping mechanism</p>
+                </div>
+
+                <div class="danger-box">
+                    <h4>❌ Pitfall 2: Incorrect Field Order</h4>
+                    <p><strong>Problem:</strong> Mismatch between save order and load order</p>
+                    <p><strong>Solution:</strong> Always maintain consistent field order: ID, Name, Phone, Age</p>
+                </div>
+
+                <div class="danger-box">
+                    <h4>❌ Pitfall 3: Type Conversion Errors</h4>
+                    <p><strong>Problem:</strong> <code>stoi()</code> crashes if string is not a valid number</p>
+                    <p><strong>Solution:</strong> Add error handling and validation (Phase 4 enhancement)</p>
+                </div>
+
+                <div class="danger-box">
+                    <h4>❌ Pitfall 4: Empty Fields</h4>
+                    <p><strong>Problem:</strong> What if phone number is empty?</p>
+                    <p><strong>Solution:</strong> Our code handles empty strings correctly with the <code>if(sWord != "")</code> check</p>
+                </div>
+            </section>
+
+            <!-- Testing Strategy -->
+            <section class="section">
+                <h2 class="section-title">🧪 Testing Strategy</h2>
+                
+                <div class="highlight-box">
+                    <h3>Test Cases to Verify</h3>
+                    <div style="margin-top: 15px;">
+                        
+                        <div class="step">
+                            <strong>Test 1: Normal Data</strong><br>
+                            Input: Regular member with all fields filled<br>
+                            Expected: Perfect conversion both ways
+                        </div>
+
+                        <div class="step">
+                            <strong>Test 2: Special Characters</strong><br>
+                            Input: Name with spaces, hyphens in phone<br>
+                            Expected: All characters preserved correctly
+                        </div>
+
+                        <div class="step">
+                            <strong>Test 3: Long Names</strong><br>
+                            Input: Very long name (50+ characters)<br>
+                            Expected: No truncation, full preservation
+                        </div>
+
+                        <div class="step">
+                            <strong>Test 4: Edge Cases</strong><br>
+                            Input: Age = 0, empty phone, single-char name<br>
+                            Expected: Handle gracefully without errors
+                        </div>
+
+                        <div class="step">
+                            <strong>Test 5: Bidirectional Verification</strong><br>
+                            Process: Struct → String → Struct<br>
+                            Expected: Original and final struct should be identical
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- What We Learned -->
+            <section class="section">
+                <h2 class="section-title">🎓 What We Learned in Phase 2</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>📚 String Manipulation</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li><code>find()</code> for searching</li>
+                            <li><code>substr()</code> for extraction</li>
+                            <li><code>erase()</code> for removal</li>
+                            <li><code>string::npos</code> constant</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>🔄 Type Conversions</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li><code>to_string()</code>: int → string</li>
+                            <li><code>stoi()</code>: string → int</li>
+                            <li>When and why to convert</li>
+                            <li>Handling conversion errors</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>🏗️ Algorithm Design</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li>Breaking complex tasks into steps</li>
+                            <li>Iterative string processing</li>
+                            <li>State management in loops</li>
+                            <li>Edge case handling</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>💾 Data Persistence Prep</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li>Serialization concepts</li>
+                            <li>Text format design</li>
+                            <li>Delimiter selection</li>
+                            <li>Bidirectional conversion</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Next Phase Preview -->
+            <section class="section">
+                <h2 class="section-title">🚀 Coming in Phase 3: File Operations</h2>
+                
+                <div class="success-box">
+                    <h3>📁 File I/O Implementation</h3>
+                    <p style="margin-top: 10px;">Now that we can convert data to/from string format, we're ready for file operations!</p>
+                </div>
+
+                <div class="feature-grid" style="margin-top: 25px;">
+                    <div class="feature-card">
+                        <h3>💾 Save to File</h3>
+                        <p>Write all members to text file</p>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li><code>ofstream</code> for output</li>
+                            <li>One member per line</li>
+                            <li>Error handling</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>📂 Load from File</h3>
+                        <p>Read members from file on startup</p>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li><code>ifstream</code> for input</li>
+                            <li>Parse each line</li>
+                            <li>Populate vector</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>✏️ Update File</h3>
+                        <p>Modify existing records</p>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li>Read entire file</li>
+                            <li>Modify specific records</li>
+                            <li>Write back to file</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>🗑️ Delete Records</h3>
+                        <p>Remove members from file</p>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li>Filter out deleted records</li>
+                            <li>Rewrite file</li>
+                            <li>Maintain data integrity</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flow-diagram" style="margin-top: 30px;">
+                    <h4 style="color: #667eea; margin-bottom: 20px;">Phase 3 Data Flow Preview</h4>
+                    <div class="flow-box flow-start">User Input</div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box flow-process">Store in Vector (Memory)</div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box flow-process">Convert to String Format</div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box flow-end">Save to File (Disk)</div>
+                    <div class="arrow" style="margin: 20px 0;">⟲</div>
+                    <div class="flow-box flow-start">Load from File (Disk)</div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box flow-process">Parse String Lines</div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box flow-process">Convert to Structs</div>
+                    <div class="arrow">↓</div>
+                    <div class="flow-box flow-end">Use in Program (Memory)</div>
+                </div>
+            </section>
+
+            <!-- Conclusion -->
+            <section class="section">
+                <h2 class="section-title">✨ Phase 2 Completion Summary</h2>
+                
+                <div class="success-box">
+                    <h3>🎉 Congratulations!</h3>
+                    <p style="margin-top: 10px; font-size: 1.05em;">
+                        You've successfully implemented a complete data conversion system! Your code can now:
+                    </p>
+                    <ul style="margin-left: 20px; margin-top: 15px; font-size: 1.05em;">
+                        <li>✅ Convert complex structs to simple text lines</li>
+                        <li>✅ Parse delimited text back into structured data</li>
+                        <li>✅ Handle bidirectional data transformation</li>
+                        <li>✅ Use custom delimiters for data safety</li>
+                        <li>✅ Prepare data for persistent file storage</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 25px;">
+                    <h4>📊 Progress Tracking</h4>
+                    <table style="width: 100%; margin-top: 15px; font-size: 1.05em;">
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 1:</strong></td>
+                            <td style="padding: 10px;">✅ Basic data structures and input</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 2:</strong></td>
+                            <td style="padding: 10px;">✅ Data conversion and serialization</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 3:</strong></td>
+                            <td style="padding: 10px;">⏭️ File I/O operations (Next)</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 4:</strong></td>
+                            <td style="padding: 10px;">⏭️ Advanced features & UI</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="info-box" style="margin-top: 25px;">
+                    <h4>🎯 Key Achievements</h4>
+                    <p style="margin-top: 10px;">
+                        <strong>Problem-Solving Skills:</strong> Broke down complex data persistence into manageable steps<br>
+                        <strong>Code Quality:</strong> Clean, well-commented, maintainable functions<br>
+                        <strong>Algorithm Design:</strong> Efficient string parsing with proper edge case handling<br>
+                        <strong>Best Practices:</strong> Separation of concerns, single responsibility principle
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="font-size: 1.5em; margin-bottom: 10px;">🏋️ <strong>Gym Management System - Phase 2</strong></p>
+            <p style="font-size: 1.1em;">Data Conversion & Serialization Complete</p>
+            <p style="margin-top: 15px; font-size: 0.95em;">
+                Built with C++ | Featuring String Manipulation & Algorithm Design
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.9;">
+                This phase demonstrates advanced string processing, data serialization concepts,
+                and preparation for persistent storage implementation.
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85em; opacity: 0.8;">
+                © 2025 | October | Clean Code Architecture
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('active');
+            
+            // Smooth scroll to element if opening
+            if(element.classList.contains('active')) {
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

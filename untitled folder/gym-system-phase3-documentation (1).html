@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Management System - Phase 3 Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 25px;
+            margin: 15px 5px;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease;
+        }
+
+        .section-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .code-header {
+            background: #21252b;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px 12px 0 0;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: -25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .toggle-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .toggle-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .collapsible-content.active {
+            max-height: 8000px;
+        }
+
+        .diagram-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 35px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 3px solid #667eea;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .keyword { color: #c678dd; font-weight: bold; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .function { color: #61afef; font-weight: bold; }
+        .number { color: #d19a66; }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.2);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            border-left: 5px solid #17a2b8;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(23, 162, 184, 0.2);
+        }
+
+        .danger-box {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 5px solid #dc3545;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.2);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            border-left: 4px solid #667eea;
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -45px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .algorithm-box {
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .algorithm-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .step strong {
+            color: #667eea;
+        }
+
+        .flow-diagram {
+            text-align: center;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .flow-box {
+            display: inline-block;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .flow-start { background: #d4edda; color: #155724; }
+        .flow-process { background: #cce5ff; color: #004085; }
+        .flow-decision { background: #fff3cd; color: #856404; }
+        .flow-end { background: #f8d7da; color: #721c24; }
+        .flow-file { background: #e7e8ea; color: #383d41; border: 2px solid #6c757d; }
+
+        .arrow {
+            font-size: 2em;
+            color: #667eea;
+            margin: 5px 0;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table tr:hover {
+            background: #e7f3ff;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+            font-size: 0.9em;
+        }
+
+        .file-structure {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .file-icon {
+            color: #667eea;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏋️ Gym Management System</h1>
+            <div class="subtitle">Phase 3: File Operations & Data Persistence</div>
+            <div>
+                <span class="phase-badge">💾 Save to File</span>
+                <span class="phase-badge">📂 Load from File</span>
+                <span class="phase-badge">🔄 Data Persistence</span>
+            </div>
+        </div>
+
+        <div class="content">
+            
+            <!-- Phase Overview -->
+            <section class="section">
+                <h2 class="section-title">🎯 Phase 3 Overview</h2>
+                
+                <div class="success-box">
+                    <h3>🎉 Welcome to File Operations!</h3>
+                    <p style="margin-top: 10px; font-size: 1.05em;">
+                        In this phase, we bring <strong>data persistence</strong> to life! Your gym members' 
+                        data will survive program restarts by being stored in files on disk.
+                    </p>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>💾 Save Members</h3>
+                        <p>Write member data to text file, one record per line</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📂 Load Members</h3>
+                        <p>Read all members from file when program starts</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>➕ Add New Member</h3>
+                        <p>Append new members to existing file</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 Display All</h3>
+                        <p>Show formatted table of all members from file</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Complete Data Flow -->
+            <section class="section">
+                <h2 class="section-title">🔄 Complete Data Persistence Flow</h2>
+                
+                <div class="diagram-box">
+                    <pre>
+    ┌─────────────────────────────────────────────────────────────────┐
+    │              💾 DATA PERSISTENCE ARCHITECTURE                   │
+    └─────────────────────────────────────────────────────────────────┘
+
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                    PROGRAM LIFECYCLE                          ║
+    ╚═══════════════════════════════════════════════════════════════╝
+
+    ┌──────────────────┐
+    │  Program Starts  │
+    │      🚀          │
+    └────────┬─────────┘
+             │
+             ▼
+    ┌──────────────────────────────────────┐
+    │  📂 LoadMembersDataFromFile()        │
+    │  • Open "Members.txt"                │
+    │  • Read line by line                 │
+    │  • Convert each line to struct       │
+    │  • Store in vector<stMember>         │
+    └────────┬─────────────────────────────┘
+             │
+             ▼
+    ┌──────────────────────────────────────┐
+    │  🧠 Data in Memory (RAM)             │
+    │  vector<stMember> vMembers           │
+    │  • Fast access                       │
+    │  • Temporary storage                 │
+    │  • Lost when program closes          │
+    └────────┬─────────────────────────────┘
+             │
+             ▼
+    ┌──────────────────────────────────────┐
+    │  🖥️  User Interactions                │
+    │  • View all members                  │
+    │  • Add new member                    │
+    │  • Search members                    │
+    └────────┬─────────────────────────────┘
+             │
+             ▼
+    ┌──────────────────────────────────────┐
+    │  ➕ AddNewMember()                    │
+    │  • Read member info                  │
+    │  • Convert to string line            │
+    │  • SaveMemberDataLinetoFile()        │
+    └────────┬─────────────────────────────┘
+             │
+             ▼
+    ┌──────────────────────────────────────┐
+    │  💾 Members.txt (Disk Storage)       │
+    │  M150#//#Walaa#//#929-222-1111#//#39 │
+    │  M151#//#Ahmed#//#555-123-4567#//#25 │
+    │  M152#//#Sara#//#444-987-6543#//#30  │
+    │  • Permanent storage                 │
+    │  • Survives program restart          │
+    └──────────────────────────────────────┘
+
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                   FILE OPERATIONS MODES                       ║
+    ╚═══════════════════════════════════════════════════════════════╝
+
+    ios::in       📖  Read mode      - Open file for reading
+    ios::out      📝  Write mode     - Open file for writing (overwrites)
+    ios::app      ➕  Append mode    - Add to end of file
+    ios::out|app  📝➕ Write+Append  - Create if not exists, append if exists
+                    </pre>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 Why This Architecture?</h4>
+                    <p><strong>Memory vs Disk:</strong> RAM is fast but temporary, Disk is slower but permanent</p>
+                    <p><strong>Load Once:</strong> Read all data at startup for fast access during program execution</p>
+                    <p><strong>Save Immediately:</strong> Write new data to file right away to prevent data loss</p>
+                    <p><strong>Separate Files:</strong> Each program instance can have its own data file</p>
+                </div>
+            </section>
+
+            <!-- File Structure -->
+            <section class="section">
+                <h2 class="section-title">📁 File Structure & Format</h2>
+
+                <div class="highlight-box">
+                    <h3>📄 Members.txt File Format</h3>
+                    <div class="file-structure">
+                        <div><span class="file-icon">📄</span>Members.txt</div>
+                        <div style="margin-left: 30px; margin-top: 10px;">
+                            <div style="color: #5c6370; font-style: italic;">// Each line = One member record</div>
+                            <div style="color: #5c6370; font-style: italic;">// Format: ID#//#Name#//#Phone#//#Age</div>
+                            <div style="margin-top: 10px;">
+                                <div>M150#//#Walaa Hussein#//#929-222-1111#//#39</div>
+                                <div>M151#//#Ahmed Ali#//#555-123-4567#//#25</div>
+                                <div>M152#//#Sara Mohammed#//#444-987-6543#//#30</div>
+                                <div>M153#//#Omar Khaled#//#333-456-7890#//#28</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>🔑 File Format Advantages</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Simple:</strong> Plain text, human-readable</li>
+                        <li><strong>One Record Per Line:</strong> Easy to parse and process</li>
+                        <li><strong>Unique Delimiter:</strong> "#//#" avoids data conflicts</li>
+                        <li><strong>Portable:</strong> Can be opened in any text editor</li>
+                        <li><strong>Debuggable:</strong> You can manually inspect the file</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Function Analysis -->
+            <section class="section">
+                <h2 class="section-title">🔧 File Operations Functions</h2>
+
+                <!-- Function 1: SaveMemberDataLinetoFile -->
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>💾 Function 1: SaveMemberDataLinetoFile()</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Append a single member record line to the file</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Create fstream object for file operations
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Open file in write+append mode (ios::out | ios::app)
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> Check if file opened successfully
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> Write data line to file with endl
+                            </div>
+                            <div class="step">
+                                <strong>Step 5:</strong> Close the file to save changes
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('save-function-code')">
+                            💻 Show/Hide: Complete Code & Analysis
+                        </button>
+                        
+                        <div id="save-function-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>SaveMemberDataLinetoFile.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">Append Member to File</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">/*
+ * Function: Save a single member record line to file
+ * Input: 
+ *   - FileName: Path to the file (e.g., "Members.txt")
+ *   - strDataLine: Pre-formatted member data line
+ * Output: None (writes to file)
+ * Mode: Append (ios::out | ios::app) - adds to end without erasing
+ */</span>
+
+<span class="keyword">void</span> <span class="function">SaveMemberDataLinetoFile</span>(<span class="keyword">string</span> FileName, <span class="keyword">string</span> strDataLine){
+    
+    <span class="keyword">fstream</span> MyFile;  <span class="comment">// File stream object for read/write operations</span>
+    
+    <span class="comment">// Open file in output+append mode</span>
+    <span class="comment">// ios::out  - Output (write) mode</span>
+    <span class="comment">// ios::app  - Append mode (add to end, don't erase existing)</span>
+    <span class="comment">// Together: Create file if doesn't exist, append if exists</span>
+    MyFile.<span class="function">open</span>(FileName, <span class="keyword">ios::out</span> | <span class="keyword">ios::app</span>);
+    
+    <span class="comment">// Check if file opened successfully</span>
+    <span class="keyword">if</span>(MyFile.<span class="function">is_open</span>()){
+        
+        <span class="comment">// Write the data line to file</span>
+        <span class="comment">// endl adds newline character and flushes buffer</span>
+        MyFile &lt;&lt; strDataLine &lt;&lt; <span class="keyword">endl</span>;
+        
+        <span class="comment">// Close file to save changes and free resources</span>
+        MyFile.<span class="function">close</span>();
+    }
+    <span class="comment">// Note: If file fails to open, function silently fails</span>
+    <span class="comment">// Production code should include error handling here</span>
+}</pre>
+                            </div>
+
+                            <!-- Visual Example -->
+                            <div class="diagram-box" style="margin-top: 20px;">
+                                <h4 style="color: #667eea; margin-bottom: 15px;">📊 Visual File Append Process</h4>
+                                <pre>
+BEFORE: Members.txt
+┌──────────────────────────────────────────────────┐
+│ M150#//#Walaa Hussein#//#929-222-1111#//#39      │
+│ M151#//#Ahmed Ali#//#555-123-4567#//#25          │
+└──────────────────────────────────────────────────┘
+
+Function Call:
+SaveMemberDataLinetoFile("Members.txt", "M152#//#Sara#//#444-987-6543#//#30");
+
+AFTER: Members.txt
+┌──────────────────────────────────────────────────┐
+│ M150#//#Walaa Hussein#//#929-222-1111#//#39      │
+│ M151#//#Ahmed Ali#//#555-123-4567#//#25          │
+│ M152#//#Sara#//#444-987-6543#//#30      ← NEW!  │
+└──────────────────────────────────────────────────┘
+                                </pre>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box" style="margin-top: 20px;">
+                            <h4>🔑 Key Concepts: File Opening Modes</h4>
+                            <table class="comparison-table">
+                                <tr>
+                                    <th>Mode</th>
+                                    <th>Symbol</th>
+                                    <th>Behavior</th>
+                                    <th>Use Case</th>
+                                </tr>
+                                <tr>
+                                    <td><strong>Input</strong></td>
+                                    <td><code>ios::in</code></td>
+                                    <td>Read from file</td>
+                                    <td>Loading data</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Output</strong></td>
+                                    <td><code>ios::out</code></td>
+                                    <td>Write to file (overwrites)</td>
+                                    <td>Creating new file</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Append</strong></td>
+                                    <td><code>ios::app</code></td>
+                                    <td>Add to end of file</td>
+                                    <td>Adding records</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Out+Append</strong></td>
+                                    <td><code>ios::out | ios::app</code></td>
+                                    <td>Create if missing, append if exists</td>
+                                    <td>Safe appending</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Function 2: AddNewMember -->
+                    <div class="timeline-item">
+                        <h4>➕ Function 2: AddNewMember()</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Complete workflow: Read member info → Convert to line → Save to file</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Create empty member struct
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Call ReadNewMember() to get user input
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> Convert member struct to delimited string using ConvertRecordToLine()
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> Save the string line to file using SaveMemberDataLinetoFile()
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('add-member-code')">
+                            💻 Show/Hide: Code & Flow Diagram
+                        </button>
+                        
+                        <div id="add-member-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>AddNewMember.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">High-Level Add Function</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">/*
+ * Function: Add a new member to the system (complete workflow)
+ * Input: None (gets data from user)
+ * Output: None (saves directly to file)
+ * Process: Read → Convert → Save
+ * This is a "coordinator" function that orchestrates other functions
+ */</span>
+
+<span class="keyword">void</span> <span class="function">AddNewMember</span>(){
+    
+    <span class="keyword">stMember</span> Member;  <span class="comment">// Create empty member struct</span>
+    
+    <span class="comment">// Step 1: Read member information from user</span>
+    Member = <span class="function">ReadNewMember</span>();
+    
+    <span class="comment">// Step 2 & 3: Convert to string line AND save to file</span>
+    <span class="comment">// This combines two operations in one elegant line:</span>
+    <span class="comment">//   1. ConvertRecordToLine(Member) - struct to string</span>
+    <span class="comment">//   2. SaveMemberDataLinetoFile() - string to file</span>
+    <span class="function">SaveMemberDataLinetoFile</span>(MembersFileName, <span class="function">ConvertRecordToLine</span>(Member));
+    
+    <span class="comment">// Member is now permanently saved! ✅</span>
+}</pre>
+                            </div>
+
+                            <!-- Flow Diagram -->
+                            <div class="diagram-box" style="margin-top: 20px;">
+                                <h4 style="color: #667eea; margin-bottom: 15px;">🔄 AddNewMember() Flow</h4>
+                                <pre>
+User Action: "Add New Member"
+        ↓
+┌───────────────────────────────────────────────────────────┐
+│ AddNewMember() Called                                     │
+└───────────────────────────────────────────────────────────┘
+        ↓
+┌───────────────────────────────────────────────────────────┐
+│ ReadNewMember()                                           │
+│   Enter ID: M155                                          │
+│   Enter Name: John Smith                                  │
+│   Enter Phone: 123-456-7890                               │
+│   Enter Age: 35                                           │
+│ Returns: stMember {M155, John Smith, 123-456-7890, 35}   │
+└───────────────────────────────────────────────────────────┘
+        ↓
+┌───────────────────────────────────────────────────────────┐
+│ ConvertRecordToLine(Member)                               │
+│ Returns: "M155#//#John Smith#//#123-456-7890#//#35"      │
+└───────────────────────────────────────────────────────────┘
+        ↓
+┌───────────────────────────────────────────────────────────┐
+│ SaveMemberDataLinetoFile("Members.txt", line)            │
+│   Opens file in append mode                               │
+│   Writes: "M155#//#John Smith#//#123-456-7890#//#35"     │
+│   Closes file                                             │
+└───────────────────────────────────────────────────────────┘
+        ↓
+    ✅ SAVED!
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Function 3: AddMembers -->
+                    <div class="timeline-item">
+                        <h4>🔁 Function 3: AddMembers() - Loop Wrapper</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Allow adding multiple members in a loop with user control</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Initialize AddMore flag to 'Y'
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Clear screen for clean interface
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> Display "Adding New Member" header
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> Call AddNewMember() to save one member
+                            </div>
+                            <div class="step">
+                                <strong>Step 5:</strong> Ask user if they want to add more
+                            </div>
+                            <div class="step">
+                                <strong>Step 6:</strong> Repeat while user answers 'Y' or 'y'
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('add-members-loop-code')">
+                            💻 Show/Hide: Loop Implementation
+                        </button>
+                        
+                        <div id="add-members-loop-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>AddMembers.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">Multiple Members Loop</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">/*
+ * Function: Add multiple members in a loop
+ * Input: None (user controls loop via Y/N response)
+ * Output: None (each member saved individually)
+ * Pattern: User-controlled loop with exit condition
+ */</span>
+
+<span class="keyword">void</span> <span class="function">AddMembers</span>(){
+    
+    <span class="keyword">char</span> AddMore = <span class="string">'Y'</span>;  <span class="comment">// Initialize loop control variable</span>
+    
+    <span class="keyword">do</span>{
+        <span class="comment">// Clear screen for clean user interface</span>
+        <span class="comment">// Use "cls" on Windows, "clear" on Linux/Mac</span>
+        <span class="function">system</span>(<span class="string">"clear"</span>);
+        
+        <span class="comment">// Display section header</span>
+        cout &lt;&lt; <span class="string">"Adding New Member:\n\n"</span>;
+        
+        <span class="comment">// Add one member (complete workflow)</span>
+        <span class="function">AddNewMember</span>();
+        
+        <span class="comment">// Inform user of success</span>
+        cout &lt;&lt; <span class="string">"\n✅ Member Added Successfully!\n"</span>;
+        
+        <span class="comment">// Ask if user wants to continue</span>
+        cout &lt;&lt; <span class="string">"Add more members? (Y/N): "</span>;
+        cin &gt;&gt; AddMore;
+        
+    } <span class="keyword">while</span>(<span class="function">toupper</span>(AddMore) == <span class="string">'Y'</span>);  <span class="comment">// Loop while user enters Y or y</span>
+    
+    <span class="comment">// Note: toupper() converts lowercase 'y' to 'Y' for case-insensitive check</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Function 4: LoadMembersDataFromFile -->
+                    <div class="timeline-item">
+                        <h4>📂 Function 4: LoadMembersDataFromFile()</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Read all member records from file into memory (vector)</p>
+                            
+                            <h4 style="margin-top: 20px;">⚙️ Algorithm Steps</h4>
+                            <div class="step">
+                                <strong>Step 1:</strong> Create empty vector to store members
+                            </div>
+                            <div class="step">
+                                <strong>Step 2:</strong> Create fstream object and open file in read mode (ios::in)
+                            </div>
+                            <div class="step">
+                                <strong>Step 3:</strong> Check if file opened successfully
+                            </div>
+                            <div class="step">
+                                <strong>Step 4:</strong> Loop: Read each line from file using getline()
+                            </div>
+                            <div class="step">
+                                <strong>Step 5:</strong> Convert each line to struct using ConvertLineToRecord()
+                            </div>
+                            <div class="step">
+                                <strong>Step 6:</strong> Add struct to vector
+                            </div>
+                            <div class="step">
+                                <strong>Step 7:</strong> Close file after reading all data
+                            </div>
+                            <div class="step">
+                                <strong>Step 8:</strong> Return populated vector
+                            </div>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('load-function-code')">
+                            💻 Show/Hide: Complete Loading Implementation
+                        </button>
+                        
+                        <div id="load-function-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>LoadMembersDataFromFile.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">File → Memory Loading</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">/*
+ * Function: Load all members from file into vector
+ * Input: FileName - Path to the members file
+ * Output: vector<stMember> - All members from file
+ * Process: Read line by line, convert each to struct, add to vector
+ */</span>
+
+<span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; <span class="function">LoadMembersDataFromFile</span>(<span class="keyword">string</span> FileName){
+    
+    <span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMember;  <span class="comment">// Container for all members</span>
+    
+    <span class="keyword">fstream</span> MyFile;  <span class="comment">// File stream object</span>
+    
+    <span class="comment">// Open file in input (read) mode</span>
+    MyFile.<span class="function">open</span>(FileName, <span class="keyword">ios::in</span>);
+    
+    <span class="comment">// Check if file exists and opened successfully</span>
+    <span class="keyword">if</span>(MyFile.<span class="function">is_open</span>()){
+        
+        <span class="keyword">string</span> Line;       <span class="comment">// Temporary storage for each line</span>
+        <span class="keyword">stMember</span> Member;  <span class="comment">// Temporary storage for converted member</span>
+        
+        <span class="comment">// Read file line by line until end of file</span>
+        <span class="comment">// getline() returns false when reaching end of file</span>
+        <span class="keyword">while</span>(<span class="function">getline</span>(MyFile, Line)){
+            
+            <span class="comment">// Convert the delimited string line to struct</span>
+            Member = <span class="function">ConvertLineToRecord</span>(Line);
+            
+            <span class="comment">// Add the member to our vector</span>
+            vMember.<span class="function">push_back</span>(Member);
+        }
+        
+        <span class="comment">// Close file to free resources</span>
+        MyFile.<span class="function">close</span>();
+    }
+    <span class="comment">// If file doesn't exist or can't open, return empty vector</span>
+    
+    <span class="keyword">return</span> vMember;  <span class="comment">// Return all loaded members</span>
+}</pre>
+                            </div>
+
+                            <!-- Visual Loading Process -->
+                            <div class="diagram-box" style="margin-top: 20px;">
+                                <h4 style="color: #667eea; margin-bottom: 15px;">📖 File Loading Process</h4>
+                                <pre>
+Members.txt (On Disk)
+┌──────────────────────────────────────────────────────────┐
+│ M150#//#Walaa Hussein#//#929-222-1111#//#39              │ ← Line 1
+│ M151#//#Ahmed Ali#//#555-123-4567#//#25                  │ ← Line 2
+│ M152#//#Sara Mohammed#//#444-987-6543#//#30              │ ← Line 3
+└──────────────────────────────────────────────────────────┘
+        ↓ LoadMembersDataFromFile("Members.txt")
+        │
+        ↓ ITERATION 1
+┌───────────────────────────────────────────────────────────┐
+│ getline(MyFile, Line)                                     │
+│ Line = "M150#//#Walaa Hussein#//#929-222-1111#//#39"     │
+│       ↓ ConvertLineToRecord(Line)                        │
+│ Member = {M150, Walaa Hussein, 929-222-1111, 39}         │
+│       ↓ push_back(Member)                                │
+│ vMember = [Member1]                                       │
+└───────────────────────────────────────────────────────────┘
+        ↓ ITERATION 2
+┌───────────────────────────────────────────────────────────┐
+│ getline(MyFile, Line)                                     │
+│ Line = "M151#//#Ahmed Ali#//#555-123-4567#//#25"         │
+│       ↓ ConvertLineToRecord(Line)                        │
+│ Member = {M151, Ahmed Ali, 555-123-4567, 25}             │
+│       ↓ push_back(Member)                                │
+│ vMember = [Member1, Member2]                              │
+└───────────────────────────────────────────────────────────┘
+        ↓ ITERATION 3
+┌───────────────────────────────────────────────────────────┐
+│ getline(MyFile, Line)                                     │
+│ Line = "M152#//#Sara Mohammed#//#444-987-6543#//#30"     │
+│       ↓ ConvertLineToRecord(Line)                        │
+│ Member = {M152, Sara Mohammed, 444-987-6543, 30}         │
+│       ↓ push_back(Member)                                │
+│ vMember = [Member1, Member2, Member3]                     │
+└───────────────────────────────────────────────────────────┘
+        ↓ End of File Reached
+        │
+        ↓ return vMember
+
+vector<stMember> vMember (In Memory - RAM)
+┌───────────────────────────────────────────────────────────┐
+│ [0] = {M150, Walaa Hussein, 929-222-1111, 39}            │
+│ [1] = {M151, Ahmed Ali, 555-123-4567, 25}                │
+│ [2] = {M152, Sara Mohammed, 444-987-6543, 30}            │
+└───────────────────────────────────────────────────────────┘
+                                </pre>
+                            </div>
+                        </div>
+
+                        <div class="info-box" style="margin-top: 20px;">
+                            <h4>💡 Why Load All at Once?</h4>
+                            <p><strong>Performance:</strong> Disk access is slow. Read once, use many times from RAM</p>
+                            <p><strong>Simplicity:</strong> Easy to search, sort, and manipulate data in memory</p>
+                            <p><strong>User Experience:</strong> Instant response for display/search operations</p>
+                            <p><strong>Trade-off:</strong> Uses more RAM, but fine for small datasets (thousands of members)</p>
+                        </div>
+                    </div>
+
+                    <!-- Function 5: Display Functions -->
+                    <div class="timeline-item">
+                        <h4>🖥️ Function 5 & 6: Display Functions</h4>
+                        
+                        <div class="algorithm-box">
+                            <h4>🎯 Purpose</h4>
+                            <p>Print members in a formatted, professional table</p>
+                        </div>
+
+                        <button class="toggle-button" onclick="toggleContent('display-functions-code')">
+                            💻 Show/Hide: Display Implementation
+                        </button>
+                        
+                        <div id="display-functions-code" class="collapsible-content">
+                            <div class="code-header">
+                                <span>DisplayFunctions.cpp</span>
+                                <span style="font-size: 0.8em; opacity: 0.8;">Formatted Output</span>
+                            </div>
+                            <div class="code-block">
+<pre><span class="comment">/*
+ * Function: Print a single member's data in table row format
+ * Input: stMember to display
+ * Output: Formatted console output
+ * Note: Uses setw() for column alignment
+ */</span>
+
+<span class="keyword">void</span> <span class="function">PrintMemberCard</span>(<span class="keyword">stMember</span> MemberCard){
+    
+    <span class="comment">// Print each field with specific column width</span>
+    <span class="comment">// left alignment ensures text starts from left of column</span>
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; MemberCard.MemberId;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">30</span>) &lt;&lt; MemberCard.Name;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; MemberCard.Phone;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; MemberCard.Age;
+}
+
+<span class="comment">/*
+ * Function: Print all members in a formatted table
+ * Input: vector<stMember> containing all members
+ * Output: Complete table with header, data rows, and footer
+ */</span>
+
+<span class="keyword">void</span> <span class="function">PrintAllMembersData</span>(<span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMembers){
+    
+    <span class="comment">// Print table header with member count</span>
+    cout &lt;&lt; <span class="string">"\n\t\t\t\tMember List ("</span> &lt;&lt; vMembers.<span class="function">size</span>() &lt;&lt; <span class="string">") Member(s).\n"</span>;
+    
+    <span class="comment">// Print top border</span>
+    cout &lt;&lt; <span class="string">"\n───────────────────────────────────────────────────────────"</span>;
+    cout &lt;&lt; <span class="string">"───────────────────────────────────────────────────────────\n"</span>;
+    
+    <span class="comment">// Print column headers</span>
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; <span class="string">"Member ID"</span>;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">30</span>) &lt;&lt; <span class="string">"Member Name"</span>;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; <span class="string">"Phone"</span>;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; <span class="string">"Age"</span>;
+    
+    <span class="comment">// Print header separator</span>
+    cout &lt;&lt; <span class="string">"\n───────────────────────────────────────────────────────────"</span>;
+    cout &lt;&lt; <span class="string">"───────────────────────────────────────────────────────────\n"</span>;
+    
+    <span class="comment">// Loop through all members and print each one</span>
+    <span class="keyword">for</span>(<span class="keyword">stMember</span> Member : vMembers){
+        <span class="function">PrintMemberCard</span>(Member);
+        cout &lt;&lt; <span class="keyword">endl</span>;  <span class="comment">// New line after each member</span>
+    }
+    
+    <span class="comment">// Print bottom border</span>
+    cout &lt;&lt; <span class="string">"\n───────────────────────────────────────────────────────────"</span>;
+    cout &lt;&lt; <span class="string">"───────────────────────────────────────────────────────────\n"</span>;
+}</pre>
+                            </div>
+
+                            <!-- Sample Output -->
+                            <div class="diagram-box" style="margin-top: 20px;">
+                                <h4 style="color: #667eea; margin-bottom: 15px;">🖥️ Expected Console Output</h4>
+                                <pre style="background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px;">
+                            Member List (3) Member(s).
+
+───────────────────────────────────────────────────────────────────────────────────
+| Member ID      | Member Name                   | Phone       | Age        
+───────────────────────────────────────────────────────────────────────────────────
+| M150           | Walaa Hussein                 | 929-222-1111| 39         
+| M151           | Ahmed Ali                     | 555-123-4567| 25         
+| M152           | Sara Mohammed                 | 444-987-6543| 30         
+
+───────────────────────────────────────────────────────────────────────────────────
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Program -->
+            <section class="section">
+                <h2 class="section-title">📄 Complete Phase 3 Program</h2>
+                
+                <div class="success-box">
+                    <h3>🎉 Full Implementation with File Operations!</h3>
+                    <p>Here's the complete program with all file handling features integrated.</p>
+                </div>
+
+                <button class="toggle-button" onclick="toggleContent('complete-program')">
+                    📥 Show/Hide: Complete Source Code
+                </button>
+                
+                <div id="complete-program" class="collapsible-content">
+                    <div class="code-header">
+                        <span>gym_system_phase3.cpp</span>
+                        <span style="font-size: 0.8em; opacity: 0.8;">Complete File Operations Implementation</span>
+                    </div>
+                    <div class="code-block">
+<pre><span class="comment">/*
+ * ═══════════════════════════════════════════════════════════════
+ *          GYM MANAGEMENT SYSTEM - PHASE 3
+ *          File Operations & Data Persistence
+ * ═══════════════════════════════════════════════════════════════
+ * Features:
+ *   ✓ Save members to file
+ *   ✓ Load members from file
+ *   ✓ Add new members with persistent storage
+ *   ✓ Display all members in formatted table
+ * 
+ * Author: Your Name
+ * Date: October 2025
+ * ═══════════════════════════════════════════════════════════════
+ */</span>
+
+<span class="keyword">#include</span> <span class="string">&lt;iostream&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;string&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;iomanip&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;cctype&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;limits&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;fstream&gt;</span>  <span class="comment">// File stream operations</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="comment">// Global constant: File name for storing member data</span>
+<span class="keyword">const string</span> MembersFileName = <span class="string">"Members.txt"</span>;
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//                    DATA STRUCTURE                          </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="keyword">struct</span> <span class="function">stMember</span>{
+    <span class="keyword">string</span> MemberId = <span class="string">""</span>;  <span class="comment">// Unique member identifier</span>
+    <span class="keyword">string</span> Name = <span class="string">""</span>;      <span class="comment">// Full name</span>
+    <span class="keyword">string</span> Phone = <span class="string">""</span>;     <span class="comment">// Contact phone</span>
+    <span class="keyword">int</span> Age = <span class="number">0</span>;           <span class="comment">// Member age</span>
+};
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//              INPUT FUNCTIONS (Phase 1)                     </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="keyword">stMember</span> <span class="function">ReadNewMember</span>(){
+    <span class="keyword">stMember</span> Member;
+    
+    cout &lt;&lt; <span class="string">"Enter Member ID: "</span>;
+    <span class="function">getline</span>(cin &gt;&gt; ws, Member.MemberId);
+    
+    cout &lt;&lt; <span class="string">"Enter Member Name: "</span>;
+    <span class="function">getline</span>(cin, Member.Name);
+    
+    cout &lt;&lt; <span class="string">"Enter Phone: "</span>;
+    <span class="function">getline</span>(cin, Member.Phone);
+    
+    cout &lt;&lt; <span class="string">"Enter Age: "</span>;
+    cin &gt;&gt; Member.Age;
+    cin.<span class="function">ignore</span>();
+    
+    <span class="keyword">return</span> Member;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//          DATA CONVERSION FUNCTIONS (Phase 2)              </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="keyword">string</span> <span class="function">ConvertRecordToLine</span>(<span class="keyword">stMember</span> Member, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>){
+    <span class="keyword">string</span> stMemberRecord = <span class="string">""</span>;
+    
+    stMemberRecord += Member.MemberId + Separator;
+    stMemberRecord += Member.Name + Separator;
+    stMemberRecord += Member.Phone + Separator;
+    stMemberRecord += <span class="function">to_string</span>(Member.Age);
+    
+    <span class="keyword">return</span> stMemberRecord;
+}
+
+<span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; <span class="function">SplitString</span>(<span class="keyword">string</span> S1, <span class="keyword">string</span> Delimiter){
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vString;
+    <span class="keyword">short</span> pos = <span class="number">0</span>;
+    <span class="keyword">string</span> sWord;
+    
+    <span class="keyword">while</span>((pos = S1.<span class="function">find</span>(Delimiter)) != <span class="keyword">std::string::npos</span>){
+        sWord = S1.<span class="function">substr</span>(<span class="number">0</span>, pos);
+        <span class="keyword">if</span>(sWord != <span class="string">""</span>){
+            vString.<span class="function">push_back</span>(sWord);
+        }
+        S1.<span class="function">erase</span>(<span class="number">0</span>, pos + Delimiter.<span class="function">length</span>());
+    }
+    
+    <span class="keyword">if</span>(S1 != <span class="string">""</span>){
+        vString.<span class="function">push_back</span>(S1);
+    }
+    
+    <span class="keyword">return</span> vString;
+}
+
+<span class="keyword">stMember</span> <span class="function">ConvertLineToRecord</span>(<span class="keyword">string</span> Line, <span class="keyword">string</span> Separator = <span class="string">"#//#"</span>){
+    <span class="keyword">stMember</span> Member;
+    <span class="keyword">vector</span>&lt;<span class="keyword">string</span>&gt; vMemberData;
+    
+    vMemberData = <span class="function">SplitString</span>(Line, Separator);
+    
+    Member.MemberId = vMemberData[<span class="number">0</span>];
+    Member.Name = vMemberData[<span class="number">1</span>];
+    Member.Phone = vMemberData[<span class="number">2</span>];
+    Member.Age = <span class="function">stoi</span>(vMemberData[<span class="number">3</span>]);
+    
+    <span class="keyword">return</span> Member;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//            FILE OPERATIONS (Phase 3 - NEW!)               </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Save a single line to file (append mode)</span>
+<span class="keyword">void</span> <span class="function">SaveMemberDataLinetoFile</span>(<span class="keyword">string</span> FileName, <span class="keyword">string</span> strDataLine){
+    <span class="keyword">fstream</span> MyFile;
+    
+    <span class="comment">// Open in output+append mode</span>
+    MyFile.<span class="function">open</span>(FileName, <span class="keyword">ios::out</span> | <span class="keyword">ios::app</span>);
+    
+    <span class="keyword">if</span>(MyFile.<span class="function">is_open</span>()){
+        MyFile &lt;&lt; strDataLine &lt;&lt; <span class="keyword">endl</span>;
+        MyFile.<span class="function">close</span>();
+    }
+}
+
+<span class="comment">// Add one member: Read → Convert → Save</span>
+<span class="keyword">void</span> <span class="function">AddNewMember</span>(){
+    <span class="keyword">stMember</span> Member;
+    Member = <span class="function">ReadNewMember</span>();
+    <span class="function">SaveMemberDataLinetoFile</span>(MembersFileName, <span class="function">ConvertRecordToLine</span>(Member));
+}
+
+<span class="comment">// Add multiple members in a loop</span>
+<span class="keyword">void</span> <span class="function">AddMembers</span>(){
+    <span class="keyword">char</span> AddMore = <span class="string">'Y'</span>;
+    
+    <span class="keyword">do</span>{
+        <span class="function">system</span>(<span class="string">"clear"</span>);
+        cout &lt;&lt; <span class="string">"Adding New Member:\n\n"</span>;
+        <span class="function">AddNewMember</span>();
+        
+        cout &lt;&lt; <span class="string">"\n✅ Member Added Successfully!\n"</span>;
+        cout &lt;&lt; <span class="string">"Add more members? (Y/N): "</span>;
+        cin &gt;&gt; AddMore;
+        
+    } <span class="keyword">while</span>(<span class="function">toupper</span>(AddMore) == <span class="string">'Y'</span>);
+}
+
+<span class="comment">// Load all members from file into vector</span>
+<span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; <span class="function">LoadMembersDataFromFile</span>(<span class="keyword">string</span> FileName){
+    <span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMember;
+    <span class="keyword">fstream</span> MyFile;
+    
+    MyFile.<span class="function">open</span>(FileName, <span class="keyword">ios::in</span>);
+    
+    <span class="keyword">if</span>(MyFile.<span class="function">is_open</span>()){
+        <span class="keyword">string</span> Line;
+        <span class="keyword">stMember</span> Member;
+        
+        <span class="keyword">while</span>(<span class="function">getline</span>(MyFile, Line)){
+            Member = <span class="function">ConvertLineToRecord</span>(Line);
+            vMember.<span class="function">push_back</span>(Member);
+        }
+        
+        MyFile.<span class="function">close</span>();
+    }
+    
+    <span class="keyword">return</span> vMember;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//              DISPLAY FUNCTIONS                             </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="keyword">void</span> <span class="function">PrintMemberCard</span>(<span class="keyword">stMember</span> MemberCard){
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; MemberCard.MemberId;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">30</span>) &lt;&lt; MemberCard.Name;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; MemberCard.Phone;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; MemberCard.Age;
+}
+
+<span class="keyword">void</span> <span class="function">PrintAllMembersData</span>(<span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMembers){
+    cout &lt;&lt; <span class="string">"\n\t\t\t\tMember List ("</span> &lt;&lt; vMembers.<span class="function">size</span>() &lt;&lt; <span class="string">") Member(s).\n"</span>;
+    cout &lt;&lt; <span class="string">"\n─────────────────────────────────────────────────────"</span>;
+    cout &lt;&lt; <span class="string">"─────────────────────────────────────────────────────\n"</span>;
+    
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">15</span>) &lt;&lt; <span class="string">"Member ID"</span>;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">30</span>) &lt;&lt; <span class="string">"Member Name"</span>;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; <span class="string">"Phone"</span>;
+    cout &lt;&lt; <span class="string">"| "</span> &lt;&lt; left &lt;&lt; <span class="function">setw</span>(<span class="number">12</span>) &lt;&lt; <span class="string">"Age"</span>;
+    
+    cout &lt;&lt; <span class="string">"\n─────────────────────────────────────────────────────"</span>;
+    cout &lt;&lt; <span class="string">"─────────────────────────────────────────────────────\n"</span>;
+    
+    <span class="keyword">for</span>(<span class="keyword">stMember</span> Member : vMembers){
+        <span class="function">PrintMemberCard</span>(Member);
+        cout &lt;&lt; <span class="keyword">endl</span>;
+    }
+    
+    cout &lt;&lt; <span class="string">"\n─────────────────────────────────────────────────────"</span>;
+    cout &lt;&lt; <span class="string">"─────────────────────────────────────────────────────\n"</span>;
+}
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">//                    MAIN PROGRAM                            </span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="keyword">int</span> <span class="function">main</span>(){
+    
+    cout &lt;&lt; <span class="string">"\n═══════════════════════════════════════════\n"</span>;
+    cout &lt;&lt; <span class="string">"   🏋️  GYM MANAGEMENT SYSTEM - Phase 3\n"</span>;
+    cout &lt;&lt; <span class="string">"═══════════════════════════════════════════\n"</span>;
+    
+    <span class="comment">// Load all existing members from file</span>
+    <span class="keyword">vector</span>&lt;<span class="keyword">stMember</span>&gt; vMember = <span class="function">LoadMembersDataFromFile</span>(MembersFileName);
+    
+    <span class="comment">// Display all loaded members</span>
+    <span class="function">PrintAllMembersData</span>(vMember);
+    
+    cout &lt;&lt; <span class="string">"\n✅ Data loaded successfully from file!\n"</span>;
+    cout &lt;&lt; <span class="string">"💾 All changes are automatically saved.\n\n"</span>;
+    
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Learnings -->
+            <section class="section">
+                <h2 class="section-title">🎓 What We Learned in Phase 3</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>📂 File Operations</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li>fstream class usage</li>
+                            <li>Opening/closing files</li>
+                            <li>Reading and writing</li>
+                            <li>File modes (in, out, app)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>💾 Data Persistence</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li>Saving to disk</li>
+                            <li>Loading from disk</li>
+                            <li>Memory vs storage</li>
+                            <li>Data survival</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>🔄 Complete Workflow</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li>End-to-end data flow</li>
+                            <li>Function coordination</li>
+                            <li>Error handling basics</li>
+                            <li>User-friendly interface</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>🎨 Code Organization</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.95em;">
+                            <li>Logical function grouping</li>
+                            <li>Clear responsibilities</li>
+                            <li>Reusable components</li>
+                            <li>Scalable architecture</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testing Scenarios -->
+            <section class="section">
+                <h2 class="section-title">🧪 Testing Your Implementation</h2>
+                
+                <div class="highlight-box">
+                    <h3>✅ Test Scenarios</h3>
+                    
+                    <div class="step" style="margin-top: 15px;">
+                        <strong>Test 1: First Run (No File Exists)</strong><br>
+                        • Run program → Should show empty list<br>
+                        • Add a member → File should be created<br>
+                        • Run again → Member should appear
+                    </div>
+
+                    <div class="step">
+                        <strong>Test 2: Adding Multiple Members</strong><br>
+                        • Add 3-5 members in one session<br>
+                        • Check Members.txt manually<br>
+                        • Verify all members saved correctly
+                    </div>
+
+                    <div class="step">
+                        <strong>Test 3: Data Persistence</strong><br>
+                        • Add members → Close program<br>
+                        • Restart program<br>
+                        • All members should still be there!
+                    </div>
+
+                    <div class="step">
+                        <strong>Test 4: Special Characters</strong><br>
+                        • Try names with spaces<br>
+                        • Try phone numbers with dashes<br>
+                        • Verify proper parsing
+                    </div>
+
+                    <div class="step">
+                        <strong>Test 5: File Format</strong><br>
+                        • Open Members.txt in text editor<br>
+                        • Verify delimiter format<br>
+                        • Check for proper line endings
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Issues -->
+            <section class="section">
+                <h2 class="section-title">⚠️ Common Issues & Solutions</h2>
+                
+                <div class="danger-box">
+                    <h4>❌ Issue 1: File Not Found</h4>
+                    <p><strong>Problem:</strong> Members.txt doesn't exist yet</p>
+                    <p><strong>Solution:</strong> ios::out | ios::app creates file if it doesn't exist</p>
+                    <p><strong>Prevention:</strong> Always use this mode for initial writes</p>
+                </div>
+
+                <div class="danger-box">
+                    <h4>❌ Issue 2: Data Not Showing</h4>
+                    <p><strong>Problem:</strong> LoadMembersDataFromFile returns empty vector</p>
+                    <p><strong>Debug:</strong> Check if file path is correct, verify file has data</p>
+                    <p><strong>Solution:</strong> Ensure working directory contains Members.txt</p>
+                </div>
+
+                <div class="danger-box">
+                    <h4>❌ Issue 3: File Won't Open</h4>
+                    <p><strong>Problem:</strong> is_open() returns false</p>
+                    <p><strong>Causes:</strong> File locked by another program, permission issues</p>
+                    <p><strong>Solution:</strong> Close file in other programs, check file permissions</p>
+                </div>
+
+                <div class="danger-box">
+                    <h4>❌ Issue 4: Garbled Data</h4>
+                    <p><strong>Problem:</strong> Data looks corrupted when reading</p>
+                    <p><strong>Cause:</strong> Delimiter mismatch or encoding issues</p>
+                    <p><strong>Solution:</strong> Verify same delimiter used for save and load</p>
+                </div>
+            </section>
+
+            <!-- Completion Summary -->
+            <section class="section">
+                <h2 class="section-title">✨ Phase 3 Completion</h2>
+                
+                <div class="success-box">
+                    <h3>🎉 Congratulations! Phase 3 Complete!</h3>
+                    <p style="margin-top: 10px; font-size: 1.05em;">
+                        You've successfully implemented <strong>data persistence</strong>! Your gym system now:
+                    </p>
+                    <ul style="margin-left: 20px; margin-top: 15px; font-size: 1.05em;">
+                        <li>✅ Saves member data to permanent storage</li>
+                        <li>✅ Loads data automatically on startup</li>
+                        <li>✅ Allows adding new members with instant save</li>
+                        <li>✅ Displays all members in a professional format</li>
+                        <li>✅ Survives program restarts</li>
+                    </ul>
+                </div>
+
+                <div class="info-box" style="margin-top: 25px;">
+                    <h4>📊 Project Progress</h4>
+                    <table style="width: 100%; margin-top: 15px; font-size: 1.05em;">
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 1:</strong></td>
+                            <td style="padding: 10px;">✅ Data structures & input</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 2:</strong></td>
+                            <td style="padding: 10px;">✅ Data conversion & serialization</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px;"><strong>Phase 3:</strong></td>
+                            <td style="padding: 10px;">✅ File operations & persistence</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 25px;">
+                    <h4>🎯 Key Achievements</h4>
+                    <p style="margin-top: 10px;">
+                        <strong>Technical Skills:</strong> Mastered file I/O, stream operations, and data persistence<br>
+                        <strong>Architecture:</strong> Built modular, reusable, and maintainable code<br>
+                        <strong>Problem-Solving:</strong> Integrated multiple phases into cohesive system<br>
+                        <strong>Best Practices:</strong> Clear functions, proper error handling, professional output
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p style="font-size: 1.5em; margin-bottom: 10px;">🏋️ <strong>Gym Management System - Phase 3</strong></p>
+            <p style="font-size: 1.1em;">File Operations & Data Persistence</p>
+            <p style="margin-top: 15px; font-size: 0.95em;">
+                Built with C++ | Featuring fstream & File Management
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.9;">
+                This phase implements permanent data storage, ensuring your gym members'
+                information survives program restarts and provides the foundation for
+                advanced CRUD operations in Phase 4.
+            </p>
+            <p style="margin-top: 15px; font-size: 0.85em; opacity: 0.8;">
+                © 2025 | October | Professional File Management System
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('active');
+            
+            if(element.classList.contains('active')) {
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

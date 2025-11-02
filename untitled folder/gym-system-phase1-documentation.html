@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Management System - Phase 1 Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            margin: 10px 5px;
+            font-size: 0.9em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-header {
+            background: #21252b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px 10px 0 0;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+        }
+
+        .toggle-button:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.active {
+            max-height: 2000px;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #667eea;
+            overflow-x: auto;
+        }
+
+        .diagram pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .keyword {
+            color: #c678dd;
+        }
+
+        .string {
+            color: #98c379;
+        }
+
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .function {
+            color: #61afef;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 3px solid #667eea;
+        }
+
+        .timeline-item {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .memory-diagram {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .memory-box {
+            border: 2px solid #333;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+
+        .memory-box.stack {
+            background: #ffe6e6;
+            border-color: #ff6b6b;
+        }
+
+        .memory-box.heap {
+            background: #e6f3ff;
+            border-color: #4dabf7;
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏋️ Gym Management System</h1>
+            <p class="subtitle">Phase 1: Foundation & Core Functionality</p>
+            <div>
+                <span class="badge">C++</span>
+                <span class="badge">Data Structures</span>
+                <span class="badge">October 2025</span>
+                <span class="badge">✅ Completed</span>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            
+            <!-- Project Overview -->
+            <section class="section">
+                <h2 class="section-title">📋 Project Overview</h2>
+                <p>In this foundational phase, we created a <strong>console-based gym member management system</strong> that allows users to efficiently manage gym member registrations with a focus on clean code architecture and scalable design.</p>
+                
+                <div class="success-box">
+                    <h3>✅ What We Accomplished</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Built a complete member registration system</li>
+                        <li>Implemented dynamic data storage using vectors</li>
+                        <li>Created professional member display cards</li>
+                        <li>Established clean code architecture for future expansion</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Key Features -->
+            <section class="section">
+                <h2 class="section-title">🎯 Key Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>➕ Multiple Member Registration</h3>
+                        <p>Add unlimited gym members in a single session with an intuitive do-while loop structure.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💾 Dynamic Memory Management</h3>
+                        <p>Utilizes C++ STL vectors for automatic memory handling and scalability.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎨 Formatted Display</h3>
+                        <p>Professional member card layout with proper formatting and alignment.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔧 Clean Architecture</h3>
+                        <p>Separation of concerns with dedicated functions for each responsibility.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technology Stack -->
+            <section class="section">
+                <h2 class="section-title">⚙️ Technology Stack</h2>
+                <div class="tech-stack">
+                    <span class="tech-badge">C++ Standard Library</span>
+                    <span class="tech-badge">STL Vectors</span>
+                    <span class="tech-badge">Structs</span>
+                    <span class="tech-badge">String Manipulation</span>
+                    <span class="tech-badge">Input/Output Streams</span>
+                </div>
+            </section>
+
+            <!-- Data Structure Design -->
+            <section class="section">
+                <h2 class="section-title">🏗️ System Architecture</h2>
+                
+                <h3 style="color: #667eea; margin: 20px 0;">1. Data Structure Design</h3>
+                <p>We use a <code>struct</code> to represent each gym member, providing a clean and organized way to group related data:</p>
+                
+                <button class="toggle-button" onclick="toggleContent('struct-code')">
+                    📦 Show/Hide: sMember Structure Code
+                </button>
+                
+                <div id="struct-code" class="collapsible-content">
+                    <div class="code-header">
+                        <span>sMember.h</span>
+                        <span style="font-size: 0.8em; opacity: 0.8;">C++ Structure Definition</span>
+                    </div>
+                    <div class="code-block">
+                        <pre><span class="keyword">struct</span> <span class="function">sMember</span>{
+    <span class="keyword">string</span> MemberId;    <span class="comment">// Unique identifier for each member</span>
+    <span class="keyword">string</span> Name;        <span class="comment">// Member's full name</span>
+    <span class="keyword">int</span> Age;           <span class="comment">// Member's age</span>
+};</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>💡 Why We Chose Struct:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>✅ <strong>Data Encapsulation:</strong> Groups related data together in one logical unit</li>
+                        <li>✅ <strong>Easy Function Passing:</strong> Pass entire member as a single parameter</li>
+                        <li>✅ <strong>Scalability:</strong> Can easily add more fields (membership type, join date, etc.)</li>
+                        <li>✅ <strong>Type Safety:</strong> Compiler enforces correct data types</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">2. Memory Architecture</h3>
+                <p>Understanding how data is stored in memory is crucial for efficient programming:</p>
+
+                <div class="diagram">
+                    <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                    MEMORY ARCHITECTURE                       │
+└─────────────────────────────────────────────────────────────┘
+
+<strong style="color: #ff6b6b;">STACK MEMORY</strong>                       <strong style="color: #4dabf7;">HEAP MEMORY</strong>
+──────────────                      ───────────────
+
+main() {
+  vector&lt;sMember&gt; vMember ─────────► [Dynamic Array on Heap]
+      │                                     │
+      │                                     ├─► <strong>Member 1</strong>
+      │                                     │   ┌──────────────┐
+      │                                     │   │ ID: "M001"   │
+      │                                     │   │ Name: "Ahmad"│
+      │                                     │   │ Age: 25      │
+      │                                     │   └──────────────┘
+      │                                     │
+      │                                     ├─► <strong>Member 2</strong>
+      │                                     │   ┌──────────────┐
+      │                                     │   │ ID: "M002"   │
+      │                                     │   │ Name: "Sara" │
+      │                                     │   │ Age: 30      │
+      │                                     │   └──────────────┘
+      │                                     │
+      │                                     └─► <strong>Member 3</strong>
+      │                                         ┌──────────────┐
+      │                                         │ ID: "M003"   │
+      │                                         │ Name: "Khaled│
+      │                                         │ Age: 28      │
+      │                                         └──────────────┘
+      │
+      └─► <em>Pointer to heap memory</em>
+}
+                    </pre>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>🧠 Memory Management Explained:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Stack Memory:</strong> Stores the vector object itself (fast, fixed size)</li>
+                        <li><strong>Heap Memory:</strong> Stores the actual member data (flexible, grows dynamically)</li>
+                        <li><strong>Automatic Cleanup:</strong> Vector automatically frees memory when it goes out of scope</li>
+                        <li><strong>No Memory Leaks:</strong> RAII (Resource Acquisition Is Initialization) principle</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Program Flow -->
+            <section class="section">
+                <h2 class="section-title">🔄 Program Execution Flow</h2>
+                
+                <button class="toggle-button" onclick="toggleContent('flow-diagram')">
+                    📊 Show/Hide: Complete Data Flow Diagram
+                </button>
+                
+                <div id="flow-diagram" class="collapsible-content">
+                    <div class="diagram">
+                        <pre>
+┌──────────────────────────────────────────────────────────────┐
+│                 PROGRAM EXECUTION FLOW                        │
+└──────────────────────────────────────────────────────────────┘
+
+<strong>START</strong>
+  │
+  ▼
+┌─────────────────────┐
+│   <strong>main()</strong> Entry      │
+│                     │
+│  Creates empty      │
+│  vector&lt;sMember&gt;    │
+└─────────────────────┘
+  │
+  │ <em>Function Call</em>
+  ▼
+┌───────────────────────────────────────────────┐
+│   <strong>ReadAllMembers()</strong>                        │
+│                                               │
+│   ┌────────────────────────────────┐         │
+│   │  <strong>Do-While Loop</strong>              │         │
+│   │                                │         │
+│   │  User wants to add? (Y/N)     │         │
+│   │         │                      │         │
+│   │         ▼ YES                  │         │
+│   │  ┌──────────────────┐         │         │
+│   │  │ <strong>ReadNewMember()</strong> │         │         │
+│   │  └──────────────────┘         │         │
+│   │         │                      │         │
+│   │         ▼                      │         │
+│   │  <em>Get User Input:</em>          │         │
+│   │  • Member ID                  │         │
+│   │  • Full Name                  │         │
+│   │  • Age                        │         │
+│   │         │                      │         │
+│   │         ▼                      │         │
+│   │  Create sMember object        │         │
+│   │         │                      │         │
+│   │         ▼                      │         │
+│   │  <strong>vMember.push_back(M)</strong>     │         │
+│   │         │                      │         │
+│   │         ▼                      │         │
+│   │  Display: "Member Added!"     │         │
+│   │         │                      │         │
+│   │         ▼                      │         │
+│   │  Ask: "Add more? Y/N"         │         │
+│   │         │                      │         │
+│   │         ├─ Y → Loop Again      │         │
+│   │         └─ N → Exit Loop       │         │
+│   │                                │         │
+│   └────────────────────────────────┘         │
+│                  │                            │
+│                  ▼                            │
+│   <strong>return vMember</strong> (back to main)          │
+│                                               │
+└───────────────────────────────────────────────┘
+  │
+  │ <em>Vector now contains all members</em>
+  ▼
+┌─────────────────────────────────────┐
+│   <strong>For Loop</strong> (Range-based)          │
+│                                     │
+│   for (const auto& Member : vMember)│
+│         │                           │
+│         ▼                           │
+│   ┌──────────────────┐             │
+│   │<strong>PrintMemberCard()</strong>│             │
+│   └──────────────────┘             │
+│         │                           │
+│         ▼                           │
+│   Display formatted                │
+│   member information               │
+│         │                           │
+│         └─► Repeat for each member │
+│                                     │
+└─────────────────────────────────────┘
+  │
+  ▼
+<strong>END</strong>
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Step 1: Program Initialization</h4>
+                        <p>The <code>main()</code> function creates an empty vector to store gym members.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Step 2: Member Collection</h4>
+                        <p><code>ReadAllMembers()</code> is called, which enters a loop allowing multiple member additions.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Step 3: Individual Input</h4>
+                        <p>For each member, <code>ReadNewMember()</code> collects ID, name, and age.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Step 4: Data Storage</h4>
+                        <p>Each member object is added to the vector using <code>push_back()</code>.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Step 5: Display Results</h4>
+                        <p>A range-based for loop iterates through all members, calling <code>PrintMemberCard()</code> for each.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Function Breakdown -->
+            <section class="section">
+                <h2 class="section-title">🔧 Function Breakdown</h2>
+
+                <h3 style="color: #667eea; margin: 20px 0;">Function 1: ReadNewMember()</h3>
+                <p><strong>Purpose:</strong> Reads a single member's information from user input</p>
+                <p><strong>Returns:</strong> sMember object containing the collected data</p>
+                
+                <button class="toggle-button" onclick="toggleContent('func1-code')">
+                    💻 Show/Hide: ReadNewMember() Code
+                </button>
+                
+                <div id="func1-code" class="collapsible-content">
+                    <div class="code-header">
+                        <span>ReadNewMember()</span>
+                    </div>
+                    <div class="code-block">
+                        <pre><span class="function">sMember</span> <span class="function">ReadNewMember</span>(){
+    <span class="keyword">sMember</span> Member;
+
+    cout &lt;&lt; <span class="string">"Enter Member ID: "</span>;
+    <span class="function">getline</span>(cin &gt;&gt; ws, Member.MemberId);
+
+    cout &lt;&lt; <span class="string">"Enter Member Name: "</span>;
+    <span class="function">getline</span>(cin, Member.Name);
+
+    cout &lt;&lt; <span class="string">"Enter Age: "</span>;
+    cin &gt;&gt; Member.Age;
+    cin.<span class="function">ignore</span>();  <span class="comment">// Clear input buffer</span>
+
+    <span class="keyword">return</span> Member;
+}</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>🔍 Key Design Decisions:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>getline() with ws:</strong> Handles whitespace and allows spaces in input</li>
+                        <li><strong>cin.ignore():</strong> Clears the newline character left in buffer after reading Age</li>
+                        <li><strong>Return by value:</strong> Modern C++ optimizes this with RVO (Return Value Optimization)</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Function 2: ReadAllMembers()</h3>
+                <p><strong>Purpose:</strong> Manages the collection of multiple members</p>
+                <p><strong>Returns:</strong> Vector containing all registered members</p>
+                
+                <button class="toggle-button" onclick="toggleContent('func2-code')">
+                    💻 Show/Hide: ReadAllMembers() Code
+                </button>
+                
+                <div id="func2-code" class="collapsible-content">
+                    <div class="code-header">
+                        <span>ReadAllMembers()</span>
+                    </div>
+                    <div class="code-block">
+                        <pre><span class="keyword">vector</span>&lt;<span class="keyword">sMember</span>&gt; <span class="function">ReadAllMembers</span>(){
+    <span class="keyword">vector</span>&lt;<span class="keyword">sMember</span>&gt; vMember;
+    <span class="keyword">char</span> AddMore = <span class="string">'Y'</span>;
+
+    <span class="keyword">do</span> {
+        <span class="function">system</span>(<span class="string">"clear"</span>);
+        cout &lt;&lt; <span class="string">"Adding New Member:\n\n"</span>;
+        
+        <span class="keyword">sMember</span> M = <span class="function">ReadNewMember</span>();
+        vMember.<span class="function">push_back</span>(M);
+
+        cout &lt;&lt; <span class="string">"\n✅ Member Added Successfully!\n"</span>;
+        cout &lt;&lt; <span class="string">"Add more members? (Y/N): "</span>;
+        cin &gt;&gt; AddMore;
+
+    } <span class="keyword">while</span> (<span class="function">toupper</span>(AddMore) == <span class="string">'Y'</span>);
+
+    <span class="keyword">return</span> vMember;
+}</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h4>🔍 Design Rationale:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Do-While Loop:</strong> Ensures at least one member is added</li>
+                        <li><strong>Local Vector:</strong> Created inside function, returned to caller</li>
+                        <li><strong>toupper():</strong> Accepts both 'y' and 'Y' for user flexibility</li>
+                        <li><strong>system("clear"):</strong> Cleans screen for better user experience</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Function 3: PrintMemberCard()</h3>
+                <p><strong>Purpose:</strong> Displays a single member's information in a formatted card</p>
+                <p><strong>Parameters:</strong> sMember object passed by value</p>
+                
+                <button class="toggle-button" onclick="toggleContent('func3-code')">
+                    💻 Show/Hide: PrintMemberCard() Code
+                </button>
+                
+                <div id="func3-code" class="collapsible-content">
+                    <div class="code-header">
+                        <span>PrintMemberCard()</span>
+                    </div>
+                    <div class="code-block">
+                        <pre><span class="keyword">void</span> <span class="function">PrintMemberCard</span>(<span class="keyword">sMember</span> MemberCard){
+    cout &lt;&lt; <span class="string">"\n================================\n"</span>;
+    cout &lt;&lt; <span class="string">"  Member Information\n"</span>;
+    cout &lt;&lt; <span class="string">"================================\n"</span>;
+    cout &lt;&lt; <span class="string">"  ID:   "</span> &lt;&lt; MemberCard.MemberId &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"  Name: "</span> &lt;&lt; MemberCard.Name &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"  Age:  "</span> &lt;&lt; MemberCard.Age &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"================================\n"</span>;
+}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Source Code -->
+            <section class="section">
+                <h2 class="section-title">📄 Complete Source Code</h2>
+                
+                <button class="toggle-button" onclick="toggleContent('full-code')">
+                    📥 Show/Hide: Full Program Code
+                </button>
+                
+                <div id="full-code" class="collapsible-content">
+                    <div class="code-header">
+                        <span>main.cpp</span>
+                        <span style="font-size: 0.8em; opacity: 0.8;">Complete Phase 1 Implementation</span>
+                    </div>
+                    <div class="code-block">
+                        <pre><span class="comment">// Gym Management System - Phase 1: Foundation
+// Author: [Your Name]
+// Date: October 2025</span>
+
+<span class="keyword">#include</span> <span class="string">&lt;iostream&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;string&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;iomanip&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;vector&gt;</span>
+<span class="keyword">#include</span> <span class="string">&lt;cctype&gt;</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="comment">// Member structure definition</span>
+<span class="keyword">struct</span> <span class="function">sMember</span>{
+    <span class="keyword">string</span> MemberId;
+    <span class="keyword">string</span> Name;
+    <span class="keyword">int</span> Age;
+};
+
+<span class="comment">// Function to read a single member's information</span>
+<span class="keyword">sMember</span> <span class="function">ReadNewMember</span>(){
+    <span class="keyword">sMember</span> Member;
+
+    cout &lt;&lt; <span class="string">"Enter Member ID: "</span>;
+    <span class="function">getline</span>(cin &gt;&gt; ws, Member.MemberId);
+
+    cout &lt;&lt; <span class="string">"Enter Member Name: "</span>;
+    <span class="function">getline</span>(cin, Member.Name);
+
+    cout &lt;&lt; <span class="string">"Enter Age: "</span>;
+    cin &gt;&gt; Member.Age;
+    cin.<span class="function">ignore</span>();
+
+    <span class="keyword">return</span> Member;
+}
+
+<span class="comment">// Function to read multiple members</span>
+<span class="keyword">vector</span>&lt;<span class="keyword">sMember</span>&gt; <span class="function">ReadAllMembers</span>(){
+    <span class="keyword">vector</span>&lt;<span class="keyword">sMember</span>&gt; vMember;
+    <span class="keyword">char</span> AddMore = <span class="string">'Y'</span>;
+
+    <span class="keyword">do</span> {
+        <span class="function">system</span>(<span class="string">"clear"</span>);
+        cout &lt;&lt; <span class="string">"Adding New Member:\n\n"</span>;
+        <span class="keyword">sMember</span> M = <span class="function">ReadNewMember</span>();
+        vMember.<span class="function">push_back</span>(M);
+
+        cout &lt;&lt; <span class="string">"\n✅ Member Added Successfully!\n"</span>;
+        cout &lt;&lt; <span class="string">"Add more members? (Y/N): "</span>;
+        cin &gt;&gt; AddMore;
+
+    } <span class="keyword">while</span> (<span class="function">toupper</span>(AddMore) == <span class="string">'Y'</span>);
+
+    <span class="keyword">return</span> vMember;
+}
+
+<span class="comment">// Function to display a member card</span>
+<span class="keyword">void</span> <span class="function">PrintMemberCard</span>(<span class="keyword">sMember</span> MemberCard){
+    cout &lt;&lt; <span class="string">"\n================================\n"</span>;
+    cout &lt;&lt; <span class="string">"  Member Information\n"</span>;
+    cout &lt;&lt; <span class="string">"================================\n"</span>;
+    cout &lt;&lt; <span class="string">"  ID:   "</span> &lt;&lt; MemberCard.MemberId &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"  Name: "</span> &lt;&lt; MemberCard.Name &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"  Age:  "</span> &lt;&lt; MemberCard.Age &lt;&lt; endl;
+    cout &lt;&lt; <span class="string">"================================\n"</span>;
+}
+
+<span class="comment">// Main function</span>
+<span class="keyword">int</span> <span class="function">main</span>(){
+    <span class="keyword">vector</span>&lt;<span class="keyword">sMember</span>&gt; vMember = <span class="function">ReadAllMembers</span>();
+
+    cout &lt;&lt; <span class="string">"\n\n📋 Displaying All Members:\n"</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">const auto</span>&amp; Member : vMember) {
+        <span class="function">PrintMemberCard</span>(Member);
+    }
+
+    <span class="keyword">return</span> <span class="string">0</span>;
+}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- What We Learned -->
+            <section class="section">
+                <h2 class="section-title">🎓 Key Learnings & Best Practices</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>📚 Data Structures</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li>STL Vector usage</li>
+                            <li>Struct organization</li>
+                            <li>Dynamic memory management</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔄 Control Flow</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li>Do-while loops</li>
+                            <li>Range-based for loops</li>
+                            <li>Function composition</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>💻 Input Handling</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li>getline() vs cin</li>
+                            <li>Buffer management</li>
+                            <li>Input validation basics</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎨 Code Quality</h3>
+                        <ul style="margin-left: 15px; margin-top: 10px; font-size: 0.9em;">
+                            <li>Function separation</li>
+                            <li>Clean code principles</li>
+                            <li>Scalable architecture</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Future Enhancements -->
+            <section class="section">
+                <h2 class="section-title">🚀 Future Enhancements (Next Phases)</h2>
+                
+                <div class="highlight-box">
+                    <h3>Phase 2: Feature Expansion</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>🔍 Search functionality by ID or Name</li>
+                        <li>✏️ Edit existing member information</li>
+                        <li>🗑️ Delete member records</li>
+                        <li>📊 Display statistics (total members, age distribution)</li>
+                        <li>📋 Interactive menu system</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <h3>Phase 3: Data Persistence</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>💾 Save data to file</li>
+                        <li>📂 Load data from file on startup</li>
+                        <li>🔄 Auto-save functionality</li>
+                        <li>📤 Export to CSV format</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box" style="margin-top: 20px;">
+                    <h3>Phase 4: Advanced Features</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>💳 Membership types and pricing</li>
+                        <li>📅 Join date and expiry tracking</li>
+                        <li>💰 Payment history</li>
+                        <li>📧 Member notifications</li>
+                        <li>🔐 User authentication system</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Challenges & Solutions -->
+            <section class="section">
+                <h2 class="section-title">⚡ Challenges & Solutions</h2>
+                
+                <div class="info-box">
+                    <h4>Challenge 1: Input Buffer Management</h4>
+                    <p><strong>Problem:</strong> Newline characters remained in buffer after using <code>cin &gt;&gt;</code>, causing <code>getline()</code> to skip input.</p>
+                    <p><strong>Solution:</strong> Added <code>cin.ignore()</code> after reading numeric input and used <code>cin &gt;&gt; ws</code> before <code>getline()</code>.</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Challenge 2: Memory Management</h4>
+                    <p><strong>Problem:</strong> Need to store unknown number of members dynamically.</p>
+                    <p><strong>Solution:</strong> Used STL vector which handles dynamic memory allocation automatically.</p>
+                </div>
+
+                <div class="info-box">
+                    <h4>Challenge 3: Code Organization</h4>
+                    <p><strong>Problem:</strong> Keeping code maintainable and scalable for future features.</p>
+                    <p><strong>Solution:</strong> Separated concerns into dedicated functions with single responsibilities.</p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Gym Management System - Phase 1</strong></p>
+            <p>Built with C++ | October 2025</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                This project demonstrates fundamental programming concepts including data structures, 
+                memory management, and clean code architecture.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(id) {
+            const element = document.getElementById(id);
+            element.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
